@@ -81,7 +81,7 @@ module Pullentity
         long_desc "Generates a new Pullentity Client project. See 'pullentity help new' for more information.
                   \n\nExample:
                   \n\npullentity project new demo ==> Creates a new project skeleton."
-        def new(name, device_id='org.mycompany.demo', platform='iphone')
+        def new(name)
           #if yes?("You are about to generate a Pullentity Client Project, Are you ready ??")
             ::Pullentity::Client::Generate::Project.create(name, device_id, platform)
           #end
