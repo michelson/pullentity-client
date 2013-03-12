@@ -83,7 +83,7 @@ module Pullentity
                   \n\npullentity project new demo ==> Creates a new project skeleton."
         def new(name)
           #if yes?("You are about to generate a Pullentity Client Project, Are you ready ??")
-            ::Pullentity::Client::Generate::Project.create(name, device_id, platform)
+            ::Pullentity::Client::Generate::Project.create(name)
           #end
         end
 
