@@ -4,6 +4,8 @@ module Pullentity
     module Generate
       class Project < Thor
 
+        include ::Pullentity::Client::Utils
+
         class << self
           attr_accessor :project_name, :device_platform, :app_id
           include ::Pullentity::Client::Utils
@@ -78,13 +80,21 @@ module Pullentity
 
         map %(n) => 'new'
         desc "project new <name> ", "generates a new Pullentity Client project."
-        long_desc "Generates a new Pullentity Client project. See 'pullentity help new' for more information.
+        long_desc "Generates a new Pullentity project. See 'pullentity help new' for more information.
                   \n\nExample:
                   \n\npullentity project new demo ==> Creates a new project skeleton."
         def new(name)
-          #if yes?("You are about to generate a Pullentity Client Project, Are you ready ??")
+          if File.exist?(base_location.join(name))
+
+            if yes?("#{name} already exists, do you want to override? (yes or no)")
+              ::Pullentity::Client::Generate::Project.create(name)
+            else
+              say "Skipping #{name} because it already exists"
+            end
+          else
             ::Pullentity::Client::Generate::Project.create(name)
-          #end
+          end
+
         end
 
       end
