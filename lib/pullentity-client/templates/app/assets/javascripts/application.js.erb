@@ -1,0 +1,54 @@
+//= require "mustache"
+//= require "pullentity"
+
+$(document).ready(function() {
+
+  var template, html;
+
+  window.data = {
+      site_link: "/",
+      site: {
+        name: "MySite",
+      },
+      sections: [
+        { public_url: "#home", title: "photos", show_in_menu: true },
+        { public_url: "#list", title: "books", show_in_menu: true },
+        { public_url: "#theme1", title: "theme1", show_in_menu: true }
+      ],
+      project: {
+        title: "My Awesome Project",
+        body: "lorem bla bla"
+      },
+      photos: [
+        { title: "my favority things",
+            caption: "donuts, pizza, computers",
+            img_large: "http://www.sinedie.cl/uploads/photo/image/164/xlarge_IMG_0862.JPG"
+        }
+      ],
+      public_url: "http://artenlinea.com",
+      url : function () {
+          return function (text, render) {
+              text = render(text);
+              var url = text.trim().toLowerCase().split('tuts+')[0] + '.tutsplus.com';
+              return '<a href="' + url + '">' + text + '</a>';
+          }
+      }
+  };
+
+  // layout
+  template = $("#layout").html();
+  layout = Mustache.to_html(template, data);
+  $("body").html(layout);
+
+
+  $(window).on('hashchange', function(e) {
+    theme = $("#yield-scripts " + window.location.hash + " ").html();
+    console.log( theme );
+    view = Mustache.to_html(theme, window.data);
+    $("#loadScripts").html(view);
+  });
+
+
+
+});
+

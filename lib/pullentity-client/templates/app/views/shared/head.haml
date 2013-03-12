@@ -1,0 +1,22 @@
+
+%head
+
+  %title Portfolios
+  %meta{:content => "", :name => "description"}
+  %meta{:content => "t", :name => "keywords"}
+  %meta{:content => "INDEX,FOLLOW", :name => "ROBOTS"}
+
+  %link{:href => "http://twitter.github.com/bootstrap/assets/css/bootstrap.css", :rel => "stylesheet"}
+  %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"}
+  %script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-carousel.js"}
+  %script{:src => "https://raw.github.com/desandro/masonry/master/jquery.masonry.min.js"}
+  %script{:src => "http://malsup.github.com/jquery.cycle.all.js"}
+  %script{:src => "https://raw.github.com/defunkt/jquery-pjax/master/jquery.pjax.js"}
+  %script{:src => "https://raw.github.com/brandonaaron/livequery/master/jquery.livequery.js"}
+
+
+  = javascript_include_tag "application"
+  = yield_content(:application_js)
+
+  = partial "views/shared/js"
+  = partial "views/shared/css"

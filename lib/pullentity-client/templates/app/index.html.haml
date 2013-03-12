@@ -1,0 +1,12 @@
+
+
+= content_for :principal do
+
+  - theme_list = Dir.foreach(Dir.pwd + ("/source/views") ).grep(/.haml/)
+
+  - theme_list.each do |o|
+    - theme_name = o.gsub(".haml", "")
+    %script{ type: "template/text", id: "#{theme_name}"}
+      = partial "views/#{theme_name}"
+
+

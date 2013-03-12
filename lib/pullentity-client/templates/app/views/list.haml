@@ -1,0 +1,11 @@
+%h2 List of projects in {{section.title}}
+%ul.thumbnails
+  {{#projects}}
+  %li.span3
+    .thumbnail
+      %img{:alt => "", :src => "{{project_photo}}"}/
+      .caption
+        %h5
+          %a.pjax{:href => "{{project_path}}"} {{title}}
+        %p
+  {{/projects}}
