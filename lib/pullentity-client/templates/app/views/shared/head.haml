@@ -14,8 +14,10 @@
   %script{:src => "https://raw.github.com/defunkt/jquery-pjax/master/jquery.pjax.js"}
   %script{:src => "https://raw.github.com/brandonaaron/livequery/master/jquery.livequery.js"}
 
-
   = javascript_include_tag "application"
+
+  = javascript_include_tag "test-data"
+
   = yield_content(:application_js)
 
   = partial "views/shared/js"

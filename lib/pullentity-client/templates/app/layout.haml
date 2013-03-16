@@ -20,8 +20,9 @@
             {{/show_in_menu}}
             {{/sections}}
         .row-fluid{"data-pjax-container" => ""}
+          / Don't remove this line
           #loadScripts
-            aqui
+            %pre Content should...
           #yield-scripts
             = yield_content(:principal)
 
