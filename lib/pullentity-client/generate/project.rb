@@ -25,8 +25,6 @@ module Pullentity
           end
 
           def copy_defaults
-            #FileUtils.cp(location.join("Resources/KS_nav_ui.png"),    "/tmp/")
-            #FileUtils.cp(location.join("Resources/KS_nav_views.png"), "/tmp/")
           end
 
           def generate_files
@@ -43,12 +41,10 @@ module Pullentity
               create_with_template(tempfile, "defaults/#{tempfile}", full_app_hash)
             end
 
-            FileUtils.cp_r(templates("app/views/shared/."), location.join("source/views/shared") )
-            FileUtils.cp_r(templates("app/assets/."), location.join("source/assets") )
+            FileUtils.cp_r(templates("app/."), location.join("source/") )
 
-            create_with_template('source/index.html.haml', 'app/index.html.haml', full_app_hash)
+            create_with_template('source/assets/javascripts/test-data.js', 'app/assets/javascripts/test-data.js', full_app_hash)
             create_with_template('source/layout.haml', 'app/layout.haml', full_app_hash)
-            create_with_template('source/views/_home.haml', 'app/views/_home.haml', full_app_hash)
 
           end
 
@@ -64,8 +60,6 @@ module Pullentity
           end
 
           def remove_old_files
-            #remove_files('README')
-            #remove_directories('Resources')
           end
 
           def location
