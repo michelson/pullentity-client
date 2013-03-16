@@ -43,8 +43,8 @@ module Pullentity
 
             FileUtils.cp_r(templates("app/."), location.join("source/") )
 
-            create_with_template('source/assets/javascripts/test-data.js', 'app/assets/javascripts/test-data.js', full_app_hash)
-            create_with_template('source/layout.haml', 'app/layout.haml', full_app_hash)
+            create_with_template('source/assets/javascripts/test-data.js', 'defaults/test-data.js', full_app_hash)
+            create_with_template('source/layout.haml', 'defaults/layout.haml', full_app_hash)
 
           end
 
