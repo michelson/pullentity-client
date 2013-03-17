@@ -51,6 +51,7 @@ module Pullentity
 
       register Pullentity::Client::Generate::Project, :project, "project", "project generator"
       register Pullentity::Client::Generate::View, :view, "view", "view generator"
+      register Pullentity::Client::Generate::Exporter, :export, "export", "export theme"
 
     end
   end
