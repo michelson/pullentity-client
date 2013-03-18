@@ -17,7 +17,6 @@ describe "Creating of a new Pullentity Client Project" do
 
     it "should be a valid json" do
       json  = JSON.parse( IO.read("dailyfocus/pullentity_build.json") )
-      #debugger
       json["themes"].size.should == 2
       json["theme_name"].should_not be_empty
       json["layout"].should_not be_empty
