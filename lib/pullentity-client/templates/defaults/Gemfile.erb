@@ -2,7 +2,6 @@ source "http://rubygems.org"
 
 
 <% if ENV["pullentity_rspec"] == "test" %>
-  <%= puts File.expand_path File.dirname(__FILE__) %>
 gem "pullentity-client"  , path: "<%= File.join(File.expand_path File.dirname(__FILE__)) %>"
 <% else %>
 gem "pullentity-client"

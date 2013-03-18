@@ -5,7 +5,7 @@ module Pullentity::Client
         include ::Pullentity::Client::Utils
 
         def build
-          system "middeman build"
+          system "middleman build"
         end
 
       end
