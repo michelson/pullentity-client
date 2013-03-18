@@ -7,11 +7,9 @@ describe "Creating of a new Pullentity Client Project" do
   end
 
   context "Directories should be created" do
-    before :all
-      system("cd dailyfocus && bundle exec pullentity view g view user")
+    before :all do
+      system("cd dailyfocus && ../bin/pullentity view g view user")
     end
-
-
 
   end
 

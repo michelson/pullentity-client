@@ -7,7 +7,7 @@ describe "Creating of a view file" do
 
   context "Creating a view file and its spec" do
     before(:each) do
-      system("cd dailyfocus && pullentity build mm")
+      system("cd dailyfocus && ../bin/pullentity build mm")
     end
 
     it "should have created the build directory" do

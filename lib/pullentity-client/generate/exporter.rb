@@ -18,15 +18,6 @@ module Pullentity
 
           end
 
-          def generate_files
-            create_project_directory
-            full_app_hash = {:app_name => @project_name, :app_name_underscore => underscore(@project_name), :platform => @device_platform}
-            create_with_template('pullentity.yml', 'defaults/pullentity.yml', full_app_hash)
-
-            create_with_template('source/assets/javascripts/test-data.js', 'defaults/test-data.js', full_app_hash)
-
-          end
-
           def location
             base_location.join(@project_name)
           end
