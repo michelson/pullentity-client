@@ -1,8 +1,11 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'rspec'
-require 'pullentity-client'
+require File.join(File.dirname(__FILE__), '../lib', 'pullentity-client')
+#require 'lib/pullentity-client'
 require 'stringio'
 #require 'config'
+
+ENV["pullentity_rspec"] = "test"
 
 RSpec.configure do |config|
 
