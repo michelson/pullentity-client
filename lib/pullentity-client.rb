@@ -9,6 +9,7 @@ require 'rocco'
 require 'thor'
 require 'erubis'
 require 'nokogiri'
+require 'json'
 
 module Pullentity
   module Client

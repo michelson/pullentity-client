@@ -1,0 +1,26 @@
+%script{ type: "template/text", id: "layout"}
+
+  .container-fluid
+    .page-header
+      %h1
+        %a.pjax{:href => "{{site_link}}"} Hello, welcom to {{site.name}}
+    .row-fluid
+      %ul#menu
+        {{#sections}}
+        {{#show_in_menu}}
+        %li
+          %a.pjax{:href => "{{public_url}}"} {{title}}
+        {{/show_in_menu}}
+        {{/sections}}
+    .row-fluid{"data-pjax-container" => ""}
+      / Don't remove this line
+      #loadScripts
+        %pre Content should...
+      #yield-scripts
+        = yield_content(:principal)
+
+
+
+    {{{loader}}}
+
+  {{{facebook_comments}}}

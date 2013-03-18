@@ -29,8 +29,10 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency(%q<compass>, ["~> 0.12.2"])
   gem.add_runtime_dependency(%q<session>, ["~> 3.1"])
   gem.add_runtime_dependency(%q<middleman>, ["3.0.12"])
+  gem.add_runtime_dependency("json")
 
   # gem.add_development_dependency(%q<bundler>, ["~> 1.0.14"])
   gem.add_development_dependency(%q<bundler>, ["~> 1.1"])
   gem.add_development_dependency(%q<rspec>, ["~> 2.6.0"])
+  gem.add_development_dependency("debugger")
 end

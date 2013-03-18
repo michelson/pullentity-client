@@ -1,28 +1,2 @@
-- name:    default
-  desc:       fieldset and legend tag
-  keywords:   "portfolios, sites, art"
-  system_theme: true
-  screenshoot: ''
-
-  layout: |
-          <%= layout %>
-  head: |
-        <%= head %>
-  list: |
-        <%= list %>
-  js: |
-      <%= js %>
-  css: |
-        <%= css %>
-  themes: ''
-
-  <% theme_list = Dir.foreach(location + ("/build/views/themes") ) %>
-
-  <% theme_list.each do |theme| %>
-  -
-     name: "teme 1"
-     body: |
-            <%= theme.readlines %>
-  <% end %>
-
+<%= JSON.pretty_generate json %>
 

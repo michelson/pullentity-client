@@ -1,4 +1,5 @@
 require 'session'
+require 'debugger'
 module Pullentity
   module Client
     module Generate
@@ -11,16 +12,47 @@ module Pullentity
           include ::Pullentity::Client::Utils
 
           def create(name)
-
+            build_theme_list
+            build_shared_views
+            build_hash_output
+            create_with_template('pullentity_build.json', 'defaults/build.yml', { :json=> @full_app_hash })
           end
 
-          def copy_defaults
+          def build_theme_list
+            @theme_list = []
+            Dir.foreach(location.join("build/views/themes") ).grep(/.html/).each do |theme|
+              @theme_list << {
+                :name => theme.gsub(".html", "") ,
+                :content => File.open(location.join("build/views/themes/#{theme}")).readlines.join("\r\t\t\t\t\t\t")
+              }
+            end
+          end
 
+          def build_shared_views
+            @js      =  File.open(location.join("build/views/shared/js.html")).readlines.join("\r\t\t\t\t\t\t")
+            @head    =  File.open(location.join("build/views/shared/head.html")).readlines.join("\r\t\t\t\t\t\t")
+            @css     =  File.open(location.join("build/views/shared/css.html")).readlines.join("\r\t\t\t\t\t\t")
+            @layout  =  File.open(location.join("build/views/shared/body.html")).readlines.join("\r\t\t\t\t\t\t")
+            @list    =  File.open(location.join("build/views/list.html")).readlines.join("\r\t\t\t\t\t\t")
+          end
+
+          def build_hash_output
+            @full_app_hash = {
+
+              :theme_name => name,
+              :themes => @theme_list,
+              :js => @js,
+              :css => @css,
+              :layout => @layout,
+              :head=> @head,
+              :list=> @list
+            }
           end
 
           def location
-            base_location.join(@project_name)
+            base_location
           end
+
 
           def source_root
             File.dirname(__FILE__)
@@ -32,6 +64,8 @@ module Pullentity
         desc "exporter new <name> ", "exports a new Pullentity Client project."
         long_desc "Exports a new Pullentity project"
         def new(name)
+          ::Pullentity::Client::Builder::Middleman.build
+          ::Pullentity::Client::Generate::Exporter.create(name)
 
         end
 
