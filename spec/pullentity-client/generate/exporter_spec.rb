@@ -24,11 +24,11 @@ describe "Creating of a new Pullentity Client Project" do
       json["css"].should_not be_empty
       json["js"].should_not be_empty
       json["head"].should_not be_empty
+      json["assets"].should_not be_empty
+      json["assets"].keys.should eql ["images", "js", "css", "fonts"]
     end
 
   end
-
-
 
   after(:all) do
     #remove_directories('dailyfocus')

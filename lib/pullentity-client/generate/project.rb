@@ -7,9 +7,11 @@ module Pullentity
         include ::Pullentity::Client::Utils
 
         class << self
+
           attr_accessor :project_name, :device_platform, :app_id
+
           include ::Pullentity::Client::Utils
-          # Coolstrap::Generator::Generate::Project.create('demo', 'org.codewranglers.demo', 'ipad')
+
           def create(name)
             @project_name    = name
 
@@ -18,7 +20,7 @@ module Pullentity
               copy_defaults
               remove_old_files
               generate_files
-              log "Your Pullentity Client project is ready for you to get coding!"
+              log "Your Pullentity Theme project is ready for you to get coding!"
             rescue => e
               error "There was an error generating your Pullentity Client project. #{e} #{e.backtrace}"
             end
