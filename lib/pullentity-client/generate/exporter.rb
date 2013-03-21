@@ -29,11 +29,10 @@ module Pullentity
           end
 
           def build_shared_views
-            # nokogiri remove scrpt tag
-            @js      =  File.open(location.join("build/views/shared/js.html")).readlines.join("")
+
+            @js      =  Nokogiri::HTML(File.open(location.join("build/views/shared/js.html")).readlines.join("")).css("script").first.content
             @head    =  File.open(location.join("build/views/shared/head.html")).readlines.join("")
-            # nokogiri remove scrpt tag
-            @css     =  File.open(location.join("build/views/shared/css.html")).readlines.join("")
+            @css     =  Nokogiri::HTML(File.open(location.join("build/views/shared/css.html")).readlines.join("")).css("style").first.content
             @layout  =  File.open(location.join("build/views/shared/body.html")).readlines.join("")
             @list    =  File.open(location.join("build/views/list.html")).readlines.join("")
           end

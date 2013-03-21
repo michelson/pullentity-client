@@ -1,5 +1,6 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'rspec'
+require 'debugger'
 require File.join(File.dirname(__FILE__), '../lib', 'pullentity-client')
 #require 'lib/pullentity-client'
 require 'stringio'
