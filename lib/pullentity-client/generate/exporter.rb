@@ -14,7 +14,7 @@ module Pullentity
           def create(name)
             build_theme_list
             build_shared_views
-            build_hash_output
+            build_hash_output(name)
             create_with_template('pullentity_build.json', 'defaults/build.yml', { :json=> @full_app_hash })
           end
 
@@ -23,20 +23,20 @@ module Pullentity
             Dir.foreach(location.join("build/views/themes") ).grep(/.html/).each do |theme|
               @theme_list << {
                 :name => theme.gsub(".html", "") ,
-                :content => File.open(location.join("build/views/themes/#{theme}")).readlines.join("\r\t\t\t\t\t\t")
+                :content => File.open(location.join("build/views/themes/#{theme}")).readlines.join("")
               }
             end
           end
 
           def build_shared_views
-            @js      =  File.open(location.join("build/views/shared/js.html")).readlines.join("\r\t\t\t\t\t\t")
-            @head    =  File.open(location.join("build/views/shared/head.html")).readlines.join("\r\t\t\t\t\t\t")
-            @css     =  File.open(location.join("build/views/shared/css.html")).readlines.join("\r\t\t\t\t\t\t")
-            @layout  =  File.open(location.join("build/views/shared/body.html")).readlines.join("\r\t\t\t\t\t\t")
-            @list    =  File.open(location.join("build/views/list.html")).readlines.join("\r\t\t\t\t\t\t")
+            @js      =  File.open(location.join("build/views/shared/js.html")).readlines.join("")
+            @head    =  File.open(location.join("build/views/shared/head.html")).readlines.join("")
+            @css     =  File.open(location.join("build/views/shared/css.html")).readlines.join("")
+            @layout  =  File.open(location.join("build/views/shared/body.html")).readlines.join("")
+            @list    =  File.open(location.join("build/views/list.html")).readlines.join("")
           end
 
-          def build_hash_output
+          def build_hash_output(name)
             @full_app_hash = {
 
               :theme_name => name,

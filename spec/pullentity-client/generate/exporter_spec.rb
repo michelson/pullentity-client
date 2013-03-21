@@ -19,6 +19,7 @@ describe "Creating of a new Pullentity Client Project" do
       json  = JSON.parse( IO.read("dailyfocus/pullentity_build.json") )
       json["themes"].size.should == 2
       json["theme_name"].should_not be_empty
+      json["theme_name"].should == "name"
       json["layout"].should_not be_empty
       json["list"].should_not be_empty
       json["css"].should_not be_empty
