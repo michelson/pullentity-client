@@ -28,6 +28,11 @@ module Pullentity
             end
           end
 
+          def name_from_yaml
+            yml = YAML.load(File.open(location.join("pullentity.yml")))
+            return yml["theme_name"]
+          end
+
           def build_shared_views
 
             @js      =  Nokogiri::HTML(File.open(location.join("build/views/shared/js.html")).readlines.join("")).css("script").first.content
@@ -82,10 +87,10 @@ module Pullentity
         map %(n) => 'new'
         desc "exporter new <name> ", "exports a new Pullentity Client project."
         long_desc "Exports a new Pullentity project"
-        def new(name)
+        def new(name = nil)
+          name_for = name.nil? ? ::Pullentity::Client::Generate::Exporter.name_from_yaml : name
           ::Pullentity::Client::Builder::Middleman.build
-          ::Pullentity::Client::Generate::Exporter.create(name)
-
+          ::Pullentity::Client::Generate::Exporter.create(name_for)
         end
 
       end

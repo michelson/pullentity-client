@@ -31,6 +31,22 @@ describe "Creating of a new Pullentity Client Project" do
 
   end
 
+  context "Directories should be created" do
+    before :all do
+      system("cd dailyfocus && bundle exec pullentity export new")
+    end
+
+    it "should generate the export build json" do
+      File.exists?("dailyfocus/pullentity_build.json").should be_true
+    end
+
+    it "should be a valid json" do
+      json  = JSON.parse( IO.read("dailyfocus/pullentity_build.json") )
+      json["theme_name"].should == "dailyfocus"
+    end
+
+  end
+
   after(:all) do
     #remove_directories('dailyfocus')
   end
