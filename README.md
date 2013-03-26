@@ -57,3 +57,6 @@ Export and install the theme for your site.
 # TODO
 
 1. upload assets.
+2. import data
+3. setup task (login + select site)
+4. make default task
