@@ -41,10 +41,11 @@ module Pullentity
             end
           end
 
-          def site_api_call
+          def check_for_yaml
             begin
               hsh = YAML.load_file(location + "pullentity.yml")
-              token = hsh["auth_token"]
+              @token = hsh["auth_token"]
+              @site = hsh["site"]
               if hsh["auth_token"].empty?
                 say "Error, the auth_token is empty", :red
                 say "run: pullentity login" , :yellow
@@ -54,23 +55,6 @@ module Pullentity
               say "and pullentity.yml file is created" , :red
               raise
             end
-            uri = URI.parse("#{domain}/api/v1/sites.json?auth_token=#{token}")
-            http = Net::HTTP.new(uri.host, uri.port)
-            request = Net::HTTP::Get.new(uri.request_uri)
-            response = http.request(request)
-            @json_body  = JSON.parse(response.body)
-          end
-
-          def prompt_for_site_select
-            site_api_call
-            count = 0
-            arr = {}
-            @json_body.each do |site|
-              count += 1
-              arr[count] = site
-              say "[#{count}] Site: #{site["name"]}", :white
-            end
-            selector(arr)
           end
 
           def write_site_in_yaml(site)
@@ -83,6 +67,46 @@ module Pullentity
             end
              hsh["site"] = site
              File.open("#{location}/pullentity.yml", "w"){|f| YAML.dump(hsh, f)}
+          end
+
+          def site_api_call()
+            check_for_yaml
+            uri = URI.parse("#{domain}/api/v1/sites.json?auth_token=#{@token}")
+            http = Net::HTTP.new(uri.host, uri.port)
+            request = Net::HTTP::Get.new(uri.request_uri)
+            response = http.request(request)
+            @json_body  = JSON.parse(response.body)
+          end
+
+          def export_api_call()
+            check_for_yaml
+
+            conn = Faraday.new(:url => domain) do |f|
+
+              f.request :multipart
+              f.request  :url_encoded             # form-encode POST params
+              f.response :logger                  # log requests to STDOUT
+              f.adapter  Faraday.default_adapter  # make requests with Net::HTTP
+            end
+
+            payload = { :theme => Faraday::UploadIO.new("#{location}/pullentity_build.json", 'text/json') }
+
+            response = conn.post("/api/v1/import_theme?auth_token=#{@token}&subdomain=#{@site}", payload )
+
+            @json_body  = JSON.parse(response.body)
+
+          end
+
+          def prompt_for_site_select
+            site_api_call
+            count = 0
+            arr = {}
+            @json_body.each do |site|
+              count += 1
+              arr[count] = site
+              say "[#{count}] Site: #{site["name"]}", :white
+            end
+            selector(arr)
           end
 
           def selector(arr)
@@ -113,7 +137,6 @@ module Pullentity
             base_location
           end
 
-
           def source_root
             File.dirname(__FILE__)
           end
@@ -135,6 +158,12 @@ module Pullentity
         desc "select site", ""
         def select_site
           prompt_for_site_select
+        end
+
+        desc "export theme site", ""
+        def export(name)
+          say "exporting current theme...", :green
+          export_api_call
         end
 
 

@@ -1,5 +1,5 @@
 require 'session'
-
+require 'faraday'
 module Pullentity
   module Client
     module Generate
@@ -91,6 +91,7 @@ module Pullentity
           name_for = name.nil? ? ::Pullentity::Client::Generate::Exporter.name_from_yaml : name
           ::Pullentity::Client::Builder::Middleman.build
           ::Pullentity::Client::Generate::Exporter.create(name_for)
+          ::Pullentity::Client::Generate::Auth.start(['export', name_for])
         end
 
       end
