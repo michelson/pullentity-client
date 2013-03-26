@@ -1,6 +1,6 @@
 # Pullentity::Client
 
-TODO: Write a gem description
+This gem provides a simple builder workspace for make pullentity sites with haml and sass
 
 ## Installation
 
@@ -18,7 +18,33 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### commands
+
+Create project
+
+    pullentity project new your_theme_name
+
+Run project
+
+    pullentity s # or pullentity server
+
+  since its a middleman app you can
+
+    middleman s or middleman server
+
+Setup your credentials
+
+    pullentity login your@email.com
+
+Choose the site you want to export theme.
+
+    pullentity select_site
+
+Export and install the theme for your site.
+
+    pullentity export
+
+
 
 ## Contributing
 
@@ -27,3 +53,7 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+# TODO
+
+1. upload assets.
