@@ -60,3 +60,5 @@ Export and install the theme for your site.
 2. import data
 3. setup task (login + select site)
 4. make default task
+5. load remote data
+6. use mustache server side
