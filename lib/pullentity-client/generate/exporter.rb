@@ -84,11 +84,18 @@ module Pullentity
 
         end
 
-        map %(n) => 'new'
-        desc "exporter new <name> ", "exports a new Pullentity Client project."
+        map %(n) => 'export'
+        desc "export", "exports a new Pullentity Client project."
         long_desc "Exports a new Pullentity project"
-        def new(name = nil)
-          name_for = name.nil? ? ::Pullentity::Client::Generate::Exporter.name_from_yaml : name
+        def export
+          begin
+            name_for = YAML.load_file(location + "pullentity.yml")["theme_name"]
+          rescue => e
+            say "Error, make sure you are inside a pullentity project", :red
+            say "and pullentity.yml file is created" , :red
+            raise
+          end
+          name_for = YAML.load_file(location + "pullentity.yml")["theme_name"]
           ::Pullentity::Client::Builder::Middleman.build
           ::Pullentity::Client::Generate::Exporter.create(name_for)
           ::Pullentity::Client::Generate::Auth.start(['export', name_for])

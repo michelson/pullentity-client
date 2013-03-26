@@ -44,8 +44,9 @@ module Pullentity
           def check_for_yaml
             begin
               hsh = YAML.load_file(location + "pullentity.yml")
-              @token = hsh["auth_token"]
-              @site = hsh["site"]
+              @token      = hsh["auth_token"]
+              @site       = hsh["site"]
+              @theme_name = hsh["theme_name"]
               if hsh["auth_token"].empty?
                 say "Error, the auth_token is empty", :red
                 say "run: pullentity login" , :yellow
@@ -82,19 +83,16 @@ module Pullentity
             check_for_yaml
 
             conn = Faraday.new(:url => domain) do |f|
-
               f.request :multipart
               f.request  :url_encoded             # form-encode POST params
-              f.response :logger                  # log requests to STDOUT
+              #f.response :logger                  # log requests to STDOUT
               f.adapter  Faraday.default_adapter  # make requests with Net::HTTP
             end
 
             payload = { :theme => Faraday::UploadIO.new("#{location}/pullentity_build.json", 'text/json') }
-
-            response = conn.post("/api/v1/import_theme?auth_token=#{@token}&subdomain=#{@site}", payload )
-
+            response = conn.put("/api/v1/import_theme?auth_token=#{@token}&subdomain=#{@site}&theme_name=#{@theme_name}", payload )
             @json_body  = JSON.parse(response.body)
-
+            say "#{@json_body[:status]} #{@json_body[:message]}", :green
           end
 
           def prompt_for_site_select
