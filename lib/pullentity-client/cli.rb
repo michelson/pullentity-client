@@ -42,8 +42,8 @@ module Pullentity
         begin
           hsh = YAML.load_file(location + "pullentity.yml")
         rescue => e
-          say "Error: #{e}, make shure you are inside pulleneity project"
-          say "and pullentity.yml file is created"
+          say "and pullentity.yml file is created", :red
+          raise e
         end
         say("In order to retreive your authentication token we need your pullentity password")
         password = ask("password: ")
@@ -54,11 +54,11 @@ module Pullentity
         response = http.request(request)
         if response.status == 200
           say "Your token is:"
-          say response.body
+          say response.body , :green
           hsh["auth_token"] = response.body
           File.open("dailyfocus/pullentity.yml", "w"){|f| YAML.dump(hsh, f)}
         else
-          say response.body
+          say response.body, :red
         end
       end
 
