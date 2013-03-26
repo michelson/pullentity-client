@@ -1,5 +1,5 @@
 require 'session'
-require "debugger"
+#require "debugger"
 module Pullentity
   module Client
     module Generate

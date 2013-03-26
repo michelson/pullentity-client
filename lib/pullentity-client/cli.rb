@@ -1,5 +1,5 @@
 require "thor/group"
-require "debugger"
+#require "debugger"
 module Pullentity
   module Client
     class CLI < Thor
