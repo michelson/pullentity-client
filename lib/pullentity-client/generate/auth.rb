@@ -45,6 +45,10 @@ module Pullentity
             begin
               hsh = YAML.load_file(location + "pullentity.yml")
               token = hsh["auth_token"]
+              if hsh["auth_token"].empty?
+                say "Error, the auth_token is empty", :red
+                say "run: pullentity login" , :yellow
+              end
             rescue => e
               say "Error, make sure you are inside a pullentity project", :red
               say "and pullentity.yml file is created" , :red
@@ -54,12 +58,48 @@ module Pullentity
             http = Net::HTTP.new(uri.host, uri.port)
             request = Net::HTTP::Get.new(uri.request_uri)
             response = http.request(request)
-            json_body  = JSON.parse(response.body)
+            @json_body  = JSON.parse(response.body)
+          end
+
+          def prompt_for_site_select
+            site_api_call
+            count = 0
+            arr = {}
+            @json_body.each do |site|
+              count += 1
+              arr[count] = site
+              say "[#{count}] Site: #{site["name"]}", :white
+            end
+            selector(arr)
+          end
+
+          def write_site_in_yaml(site)
+            begin
+              hsh = YAML.load_file(location + "pullentity.yml")
+            rescue => e
+              say "Error, make sure you are inside a pullentity project", :red
+              say "and pullentity.yml file is created" , :red
+              raise
+            end
+             hsh["site"] = site
+             File.open("#{location}/pullentity.yml", "w"){|f| YAML.dump(hsh, f)}
+          end
+
+          def selector(arr)
+            answer = ask "select the site", :yellow
+            if arr[answer.to_i]
+              write_site_in_yaml(arr[answer.to_i]["subdomain"])
+              say "you have selected #{arr[answer.to_i]["name"]}", :green
+              say "we configure site name in pullentity.yml", :green
+            else
+              say "plase select one on the list" , :red
+              selector(arr)
+            end
           end
 
           def get_sites
             site_api_call
-            json_body.each do |site|
+            @json_body.each do |site|
               say "Site ID: ##{site["id"]}", :white
               say " Name: " + site["name"].to_s, :green
               say " Domain: " + site["keywords"].to_s, :green
@@ -90,6 +130,11 @@ module Pullentity
         desc "list sites", ""
         def list_sites
           get_sites
+        end
+
+        desc "select site", ""
+        def select_site
+          prompt_for_site_select
         end
 
 

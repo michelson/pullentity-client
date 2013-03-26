@@ -63,6 +63,13 @@ module Pullentity
         ::Pullentity::Client::Generate::Auth.start(['list_sites'])
       end
 
+      map %(n) => 'select'
+      desc "select site", "needs auth_token."
+      long_desc "select site, needs auth token , run pullentity login help"
+      def select_site
+        ::Pullentity::Client::Generate::Auth.start(['select_site'])
+      end
+
       register Pullentity::Client::Generate::Project, :project, "project", "project generator"
       register Pullentity::Client::Generate::Exporter, :export, "export", "export theme"
 
