@@ -1,5 +1,5 @@
 require "thor/group"
-
+require "debugger"
 module Pullentity
   module Client
     class CLI < Thor
@@ -35,33 +35,6 @@ module Pullentity
         system "bundle exec middleman server"
       end
 
-      map %w(r) => 'server'
-      desc "login ", "retreives token"
-      long_desc "pullentity-client login user pass"
-      def login(email)
-        begin
-          hsh = YAML.load_file(location + "pullentity.yml")
-        rescue => e
-          say "and pullentity.yml file is created", :red
-          raise e
-        end
-        say("In order to retreive your authentication token we need your pullentity password")
-        password = ask("password: ")
-        uri = URI.parse("http://pullentity.dev:3000/api/v1/login.json")
-        http = Net::HTTP.new(uri.host, uri.port)
-        request = Net::HTTP::Post.new(uri.request_uri)
-        request.set_form_data({"email" => email, "password" => password  })
-        response = http.request(request)
-        if response.status == 200
-          say "Your token is:"
-          say response.body , :green
-          hsh["auth_token"] = response.body
-          File.open("dailyfocus/pullentity.yml", "w"){|f| YAML.dump(hsh, f)}
-        else
-          say response.body, :red
-        end
-      end
-
       map %w(b) => 'build'
       desc "build ", "builds middleman/ios/android app"
       long_desc "Build pullentity-client static files (middleman), See 'pullentity-client help build' for more information.
@@ -74,6 +47,20 @@ module Pullentity
       def build(type="", ver="5.1")
         puts "echo ::== pullentity-client BUILD =="
         ::Pullentity::Client::Builder::Middleman.build
+      end
+
+      map %(n) => 'login'
+      desc "auth login <email> ", "login and configures auth_token."
+      long_desc "login and configures auth_token"
+      def login(email)
+        ::Pullentity::Client::Generate::Auth.start(['set_login', email])
+      end
+
+      map %(n) => 'sites'
+      desc "list sites", "needs auth_token."
+      long_desc "list sites, needs auth token , run pullentity login help"
+      def sites
+        ::Pullentity::Client::Generate::Auth.start(['list_sites'])
       end
 
       register Pullentity::Client::Generate::Project, :project, "project", "project generator"

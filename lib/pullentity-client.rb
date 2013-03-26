@@ -24,6 +24,8 @@ module Pullentity
       autoload  :Project,     "pullentity-client/generate/project.rb"
       autoload  :Model,       "pullentity-client/generate/model.rb"
       autoload  :Exporter,    "pullentity-client/generate/exporter.rb"
+      autoload  :Auth,        "pullentity-client/generate/auth.rb"
+
     end
 
     module Builder
