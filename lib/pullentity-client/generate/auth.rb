@@ -23,7 +23,7 @@ module Pullentity
               raise
             end
             say("In order to retreive your authentication token we need your pullentity password", :yellow)
-            password = ask("write your password: ", :magenta )
+            password = ask("write your password: ", :magenta, :password => true )
             uri = URI.parse("#{domain}/api/v1/login.json")
             http = Net::HTTP.new(uri.host, uri.port)
             request = Net::HTTP::Post.new(uri.request_uri)

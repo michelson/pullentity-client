@@ -11,6 +11,26 @@ require 'erubis'
 require 'nokogiri'
 require 'json'
 
+require 'tempfile'
+require 'pullentity-client/thor/shell/password'
+
+Thor::Shell::Basic.class_eval do
+  include Thor::Shell::Password
+
+  def ask(statement, *args)
+    options = args.last.is_a?(Hash) ? args.pop : {}
+
+    if options[:limited_to]
+      ask_filtered(statement, options[:limited_to], *args)
+    elsif options[:password]
+      ask_passwordly(statement, *args)
+    else
+      ask_simply(statement, *args)
+    end
+  end
+
+end
+
 module Pullentity
   module Client
     ROOT_PATH = Pathname(__FILE__).dirname.expand_path
