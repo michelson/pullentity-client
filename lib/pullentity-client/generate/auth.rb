@@ -71,9 +71,9 @@ module Pullentity
              File.open("#{location}/pullentity.yml", "w"){|f| YAML.dump(hsh, f)}
           end
 
-          def site_api_call()
+          def site_api_call(path)
             check_for_yaml
-            uri = URI.parse("#{domain}/api/v1/sites.json?auth_token=#{@token}")
+            uri = URI.parse("#{domain}#{path}?auth_token=#{@token}")
             http = Net::HTTP.new(uri.host, uri.port)
             request = Net::HTTP::Get.new(uri.request_uri)
             response = http.request(request)
@@ -96,8 +96,16 @@ module Pullentity
             say "#{@json_body[:status]} #{@json_body[:message]}", :green
           end
 
+          def get_site_activated_theme_data
+            site_api_call("/api/v1/sites/#{@site}.json")
+          end
+
+          def get_site_theme_data
+            site_api_call("/api/v1/sites/#{@site}/themes/#{@theme_name}.json")
+          end
+
           def prompt_for_site_select
-            site_api_call
+            site_api_call("/api/v1/sites.json")
             count = 0
             arr = {}
             @json_body.each do |site|
@@ -121,7 +129,7 @@ module Pullentity
           end
 
           def get_sites
-            site_api_call
+            site_api_call("/api/v1/sites.json")
             @json_body.each do |site|
               say "Site ID: ##{site["id"]}", :white
               say " Name: " + site["name"].to_s, :green
