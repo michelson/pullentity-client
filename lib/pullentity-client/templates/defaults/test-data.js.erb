@@ -1,87 +1,153 @@
-//= require "mustache"
+# Don't edit this file unless you know you are doing
 
-$(document).ready(function() {
+#= require "mustache"
 
-  var template, html;
+$(document).ready ->
+  template = undefined
+  html = undefined
+  window.base_image_path = "http://pullentity.com"
+  window.data = {}
+  window.data =
+    site_link: "/"
+    public_url: "http://artenlinea.com"
+    project: {}
+    photos: []
+    url: ->
+      (text, render) ->
+        text = render(text)
+        url = text.trim().toLowerCase().split("tuts+")[0] + ".tutsplus.com"
+        "<a href=\"" + url + "\">" + text + "</a>"
 
-  window.data = {
-      site_link: "/",
-      site: {
-        name: "<%= app_name %>",
-      },
-      sections: [
-        { public_url: "#home", title: "photos", show_in_menu: true },
-        { public_url: "#list", title: "books", show_in_menu: true },
-        { public_url: "#theme1", title: "theme1", show_in_menu: true }
-      ],
-      project: {
-        title: "My Awesome Project",
-        body: "lorem bla bla"
-      },
-      photos: [
-        {   title: "my favorite things",
-            caption: "donuts, pizza, computers",
-            img_large: "http://farm7.staticflickr.com/6161/6187349656_4be054c2d8_z_d.jpg"
-        },
-        {
-          title: "mexican",
-          caption: "Mexican letters",
-          img_large: "http://farm7.staticflickr.com/6155/6187348764_4565f30184_z_d.jpg"
-        },
-        {
-          title: "Rome",
-          caption: "When in Rome",
-          img_large: "http://farm7.staticflickr.com/6158/6186830089_81d4fc3382_z_d.jpg"
-        },
-        {
-          title: "Salvo",
-          caption: "Salvo",
-          img_large: "http://farm7.staticflickr.com/6065/6132525393_6a61e20cd9_z_d.jpg"
-        }
+  $.getJSON "/assets/javascripts/pullentity_data.json", (json_data) ->
 
-      ],
-      section: {
-        title: "some section here"
-      },
-      projects: [
-        {
-          project_photo: "http://farm7.staticflickr.com/6161/6187349656_4be054c2d8_z_d.jpg",
-          title: "project title",
-          project_path: "#home"
-        },
-        {
-          project_photo: "http://farm7.staticflickr.com/6161/6187349656_4be054c2d8_z_d.jpg",
-          title: "project title 2",
-          project_path: "#home"
-        },
-        {
-          project_photo: "http://farm7.staticflickr.com/6161/6187349656_4be054c2d8_z_d.jpg",
-          title: "project title 3",
-          project_path: "#home"
-        }
-      ],
-      public_url: "http://artenlinea.com",
-      url : function () {
-          return function (text, render) {
-              text = render(text);
-              var url = text.trim().toLowerCase().split('tuts+')[0] + '.tutsplus.com';
-              return '<a href="' + url + '">' + text + '</a>';
-          }
-      }
-  };
+    items = []
+    #debugger
+    window.data["site"] =
+      name: json_data.name
+      subdomain: json_data.subdomain
 
-  // layout
-  template = $("#layout").html();
-  layout = Mustache.to_html(template, data);
-  $("body").html(layout);
+    window.data["sections"] = []
 
+    $.each json_data.sections, (key, val) ->
+      window.data["sections"].push val
 
-  $(window).on('hashchange', function(e) {
-    theme = $("#yield-scripts " + window.location.hash + " ").html();
-    console.log( theme );
-    view = Mustache.to_html(theme, window.data);
-    $("#loadScripts").html(view);
-  });
+    window.data["projects"] = []
+    $.each json_data.projects, (key, val) ->
+      window.data["projects"].push  val
 
+    window.init_themes()
 
-});
+  # layout initialization
+  window.init_themes = ()->
+
+    template = $("#layout").html()
+
+    window.data["project"] = window.data.projects[0]
+
+    fill_projects(window.data["project"].photos)
+    $.each window.data["project"].photos, (key, val) ->
+      window.data["photos"].push
+         img_medium: remote_path( val.image.image.medium.url)
+         img_large: remote_path(val.image.image.large.url)
+         img_thumb: remote_path(val.image.image.thumb.url)
+         title: val.title
+         caption: val.caption
+
+    layout = Mustache.to_html(template, data)
+
+    $("body").html layout
+
+    $(window).on "hashchange", (e) ->
+
+      theme = $("#yield-scripts " + window.location.hash + " ").html()
+
+      console.warn("please create file in views/themes/#{window.location.hash}.haml") unless theme?
+      $.each window.data.projects, ()->
+        if this.section.public_url == window.location.hash
+          window.data["project"] = this
+          return
+
+      console.warn "we couldn´t find project with section" unless window.data["project"]?
+      fill_projects(window.data["project"].photos)
+
+      #console.log window.data.project
+      #debugger
+      view = Mustache.to_html(theme, window.data)
+      $("#loadScripts").html view
+
+  window.remote_path = (path)->
+    "http://pullentity.com/#{path}"
+
+  window.fill_projects = (collection)->
+    window.data["photos"] = []
+    $.each collection, (key, val) ->
+      window.data["photos"].push
+       img_medium: remote_path( val.image.image.medium.url)
+       img_large: remote_path(val.image.image.large.url)
+       img_thumb: remote_path(val.image.image.thumb.url)
+       title: val.title
+       caption: val.caption
+  ###
+  window.data =
+    site_link: "/"
+    site:
+      name: "michelsongs"
+
+    sections: [
+      public_url: "#home"
+      title: "photos"
+      show_in_menu: true
+    ,
+      public_url: "#list"
+      title: "books"
+      show_in_menu: true
+    ,
+      public_url: "#theme1"
+      title: "theme1"
+      show_in_menu: true
+    ]
+    project:
+      title: "My Awesome Project"
+      body: "lorem bla bla"
+
+    photos: [
+      title: "my favorite things"
+      caption: "donuts, pizza, computers"
+      img_large: "http://farm7.staticflickr.com/6161/6187349656_4be054c2d8_z_d.jpg"
+    ,
+      title: "mexican"
+      caption: "Mexican letters"
+      img_large: "http://farm7.staticflickr.com/6155/6187348764_4565f30184_z_d.jpg"
+    ,
+      title: "Rome"
+      caption: "When in Rome"
+      img_large: "http://farm7.staticflickr.com/6158/6186830089_81d4fc3382_z_d.jpg"
+    ,
+      title: "Salvo"
+      caption: "Salvo"
+      img_large: "http://farm7.staticflickr.com/6065/6132525393_6a61e20cd9_z_d.jpg"
+    ]
+    section:
+      title: "some section here"
+
+    projects: [
+      project_photo: "http://farm7.staticflickr.com/6161/6187349656_4be054c2d8_z_d.jpg"
+      title: "project title"
+      project_path: "#home"
+    ,
+      project_photo: "http://farm7.staticflickr.com/6161/6187349656_4be054c2d8_z_d.jpg"
+      title: "project title 2"
+      project_path: "#home"
+    ,
+      project_photo: "http://farm7.staticflickr.com/6161/6187349656_4be054c2d8_z_d.jpg"
+      title: "project title 3"
+      project_path: "#home"
+    ]
+    public_url: "http://artenlinea.com"
+    url: ->
+      (text, render) ->
+        text = render(text)
+        url = text.trim().toLowerCase().split("tuts+")[0] + ".tutsplus.com"
+        "<a href=\"" + url + "\">" + text + "</a>"
+  ###
+
