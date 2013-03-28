@@ -1,5 +1,5 @@
 require 'session'
-#require "debugger"
+require "debugger"
 module Pullentity
   module Client
     module Generate
@@ -10,8 +10,8 @@ module Pullentity
         no_tasks {
 
           def domain
-            "http://pullentity.com"
-            #"http://pullentity.dev:3000"
+            #{}"http://pullentity.com"
+            "http://pullentity.dev:3000"
           end
 
           def login(email)
@@ -72,12 +72,11 @@ module Pullentity
           end
 
           def site_api_call(path)
-            check_for_yaml
             uri = URI.parse("#{domain}#{path}?auth_token=#{@token}")
             http = Net::HTTP.new(uri.host, uri.port)
             request = Net::HTTP::Get.new(uri.request_uri)
-            response = http.request(request)
-            @json_body  = JSON.parse(response.body)
+            @response = http.request(request)
+            @json_body  = JSON.parse(@response.body)
           end
 
           def export_api_call()
@@ -97,11 +96,25 @@ module Pullentity
           end
 
           def get_site_activated_theme_data
+            check_for_yaml
             site_api_call("/api/v1/sites/#{@site}.json")
           end
 
           def get_site_theme_data
+            check_for_yaml
             site_api_call("/api/v1/sites/#{@site}/themes/#{@theme_name}.json")
+          end
+
+          def current_theme
+            check_for_yaml
+            site_api_call("/api/v1/sites/#{@site}")
+            say @json_body, :green
+          end
+
+          def make_default_for_site
+            check_for_yaml
+            site_api_call("/api/v1/sites/#{@site}/themes/#{@theme_name}/make_default.json")
+            say @json_body, :green
           end
 
           def prompt_for_site_select
@@ -114,6 +127,15 @@ module Pullentity
               say "[#{count}] Site: #{site["name"]}", :white
             end
             selector(arr)
+          end
+
+          def get_data
+            check_for_yaml
+            site_api_call("/api/v1/sites/#{@site}/data")
+            File.open("#{location}/source/assets/javascripts/pullentity_data.json","w") do |f|
+              f.write(@json_body.to_json)
+            end
+            say "data file imported at source/assets/javascripts/pullentity_data.json", :green if File.exists?("#{location}/data.json")
           end
 
           def selector(arr)
@@ -173,7 +195,21 @@ module Pullentity
           export_api_call
         end
 
+        desc "make default theme", ""
+        def make_default
+          say "set theme to default", :green
+          make_default_for_site
+        end
 
+        desc "show theme", ""
+        def show_theme
+          current_theme
+        end
+
+        desc "download theme", ""
+        def download_json_data
+          get_data
+        end
 
       end
     end

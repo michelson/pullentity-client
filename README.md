@@ -54,11 +54,11 @@ Export and install the theme for your site.
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-# TODO
+# TODO , path for 0.1.0
 
 1. upload assets.
 2. import data
-3. setup task (login + select site)
-4. make default task
+3. OK setup task (login + select site)
+4. OK make default task
 5. load remote data
 6. use mustache server side
