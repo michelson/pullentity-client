@@ -22,24 +22,31 @@ $(document).ready ->
         url = text.trim().toLowerCase().split("tuts+")[0] + ".tutsplus.com"
         "<a href=\"" + url + "\">" + text + "</a>"
 
-  $.getJSON "/assets/javascripts/pullentity_data.json", (json_data) ->
+  $.getJSON( "/assets/javascripts/pullentity_data.json", (json_data) ->
+    ).success((json_data)->
+      items = []
+      #debugger
+      window.data["site"] =
+        name: json_data.name
+        subdomain: json_data.subdomain
 
-    items = []
-    #debugger
-    window.data["site"] =
-      name: json_data.name
-      subdomain: json_data.subdomain
+      window.data["sections"] = []
 
-    window.data["sections"] = []
+      $.each json_data.sections, (key, val) ->
+        window.data["sections"].push val
 
-    $.each json_data.sections, (key, val) ->
-      window.data["sections"].push val
+      window.data["projects"] = []
+      $.each json_data.projects, (key, val) ->
+        window.data["projects"].push  val
 
-    window.data["projects"] = []
-    $.each json_data.projects, (key, val) ->
-      window.data["projects"].push  val
-
-    window.init_themes()
+      window.init_themes()
+    )
+    .error(->
+      html = "<div style='margin:20px'><h1>data file not found<h1>"
+      html += "<pre>please run 'pullentity setup' in console to setup autentication and import data</pre>"
+      html += "<pre>or 'pullentity theme import_data' in console, if you already have authenticated your theme</pre></div>"
+      $("body").html(html)
+    )
 
   # layout initialization
   window.init_themes = ()->
@@ -68,10 +75,21 @@ $(document).ready ->
     url = window.location.hash
     #console.log "changed to #{url}"
     m = switch
+      when url == "" then render_home_project()
       when /(\w)\/\d/.test(url) then find_project_by_id()
       when /(\w)/.test(url) then find_in_section()
       else
         console.warn("not matching url")
+
+  window.render_theme = (theme_html)->
+    if theme_html?
+      view = Mustache.to_html(theme_html, window.data)
+      $("#content").html view
+    else
+      html = "<div style='margin:20px'><h1>Theme \"#{window.data.project.theme_template.name}\" not found!<h1>"
+      html += "<pre>Please create it in /source/views/themes/#{window.data.project.theme_template.name}.haml</pre></div>"
+      $("body").html(html)
+
 
   # get home project and render it
   window.render_home_project = ()->
@@ -80,17 +98,11 @@ $(document).ready ->
       p.home
     )
 
-    #console.log window.data["project"]
-
     fill_projects(window.data["project"].photos)
 
     find_theme_for_project()
 
-    #console.log $(window.theme)
-
-    view = Mustache.to_html($(window.theme[0]).html(), window.data)
-    $("#content").html view
-
+    render_theme($(window.theme[0]).html())
 
   # points path for remote image resources
   window.remote_path = (path)->
@@ -119,14 +131,13 @@ $(document).ready ->
       find_theme_for_project()
 
       fill_projects(window.data["project"].photos)
-      view = Mustache.to_html($(window.theme[0]).html(), window.data)
-      $("#content").html view
+
+      render_theme($(window.theme[0]).html())
 
     else
       #console.log "should be list!!"
       data_projects = data_projects_for_list()
-      view = Mustache.to_html($(window.list_theme).html(), data_projects)
-      $("#content").html view
+      render_theme($(window.list_theme).html())
 
     false
 
@@ -178,8 +189,4 @@ $(document).ready ->
 
     find_theme_for_project()
     fill_projects(window.data["project"].photos)
-    view = Mustache.to_html($(window.theme[0]).html(), window.data)
-    $("#content").html view
-
-
-
+    render_theme($(window.theme[0]).html())

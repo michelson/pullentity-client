@@ -57,11 +57,12 @@ module Pullentity
       end
 
       #map %(n) => 'select'
-      desc "setup <email>", "setup login and set site."
+      desc "setup <email>", "setup login and set site and import data."
       long_desc "select site, needs auth token , run pullentity login help"
       def setup(email)
         ::Pullentity::Client::Generate::Auth.start(['set_login', email])
         ::Pullentity::Client::Generate::Auth.start(['select_site'])
+        ::Pullentity::Client::Generate::Theme.start(['import_data'])
       end
 
       register Pullentity::Client::Generate::Project, :project, "project", "project generator"

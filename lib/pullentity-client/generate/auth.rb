@@ -1,5 +1,5 @@
 require 'session'
-require "debugger"
+
 module Pullentity
   module Client
     module Generate
@@ -123,7 +123,6 @@ module Pullentity
             site_api_call("/api/v1/sites.json")
             count = 0
             arr = {}
-            puts @json_body
             @json_body.each do |site|
               count += 1
               arr[count] = site
