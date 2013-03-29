@@ -62,7 +62,7 @@ $(document).ready ->
       console.log("in /")
       url = window.location.hash
       m = switch
-        when "" then render_home_project()
+        when url == "" then render_home_project()
         when /(\w)\/\d/.test(url) then find_project_by_id()
         when /(\w)/.test(url) then find_in_section()
         else
@@ -183,3 +183,6 @@ $(document).ready ->
     fill_projects(window.data["project"].photos)
     view = Mustache.to_html($(window.theme[0]).html(), window.data)
     $("#content").html view
+
+
+
