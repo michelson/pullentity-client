@@ -48,13 +48,6 @@ $(document).ready ->
     window.data["project"] = window.data.projects[0]
 
     fill_projects(window.data["project"].photos)
-    $.each window.data["project"].photos, (key, val) ->
-      window.data["photos"].push
-         img_medium: remote_path(val.image.image.medium.url)
-         img_large: remote_path(val.image.image.large.url)
-         img_thumb: remote_path(val.image.image.thumb.url)
-         title: val.title
-         caption: val.caption
 
     layout = Mustache.to_html(template, data)
 
@@ -64,43 +57,14 @@ $(document).ready ->
       window.theme = ""
       window.data["project"] = {}
       # find section by window.location, then find project and theme
-      $.each window.data.sections, ()->
-        if this.public_url == window.location.hash
-          # find project
-          _tis = this
-          _tis.finds = false
-
-          $.each window.data.projects, ()->
-
-            if this.section.public_url == _tis.public_url
-              _tis.finds = true
-              window.data["project"] = this
-              console.log window.data["project"]
-              if _tis.list_or_project == "project"
-
-                console.log("trying theme #{window.data["project"].theme_template.name}")
-                #debugger
-                window.theme = $($(_.find($(window.mustache_themes), (num) ->
-                  $(num).attr("id") == "home"
-                )).html())
-
-                console.warn("please create file in views/themes/#{this.theme_template.name}.haml")
-                view = Mustache.to_html($(window.theme[0]).html(), window.data)
-                console.log(view)
-                $("#content").html view
-
-              else
-                window.theme = $("#yield-scripts #list").html()
-              false
-
-
-      console.warn "we couldn´t find project with section" unless window.data["project"]?
+      find_in_section()
       fill_projects(window.data["project"].photos)
 
-
+  # points path for remote image resources
   window.remote_path = (path)->
     "http://pullentity.com/#{path}"
 
+  # builds the project photos hsh
   window.fill_projects = (collection)->
     window.data["photos"] = []
     $.each collection, (key, val) ->
@@ -110,4 +74,42 @@ $(document).ready ->
        img_thumb: remote_path(val.image.image.thumb.url)
        title: val.title
        caption: val.caption
+
+  # display project or list
+  window.display_project_or_list = (_tis)->
+
+    if _tis.list_or_project == "project"
+
+      console.log("trying theme #{window.data["project"].theme_template.name}")
+      window.theme = $($(_.find($(window.mustache_themes), (num) ->
+        $(num).attr("id") == "home"
+      )).html())
+
+      console.warn("please create file in views/themes/#{window.data["project"].theme_template.name}.haml")
+      view = Mustache.to_html($(window.theme[0]).html(), window.data)
+      #console.log(view)
+      $("#content").html view
+
+    else
+      window.theme = $("#yield-scripts #list").html()
+
+    false
+
+  # maps project for section
+  window.find_in_section = ()->
+
+    $.each window.data.sections, ()->
+
+      if this.public_url == window.location.hash
+        # find project
+        _tis = this
+        _tis.finds = false
+
+        $.each window.data.projects, ()->
+          if this.section.public_url == _tis.public_url
+            window.data["project"] = this
+            console.log window.data["project"]
+            display_project_or_list(_tis)
+
+
 
