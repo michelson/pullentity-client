@@ -1,4 +1,5 @@
 # Don't edit this file unless you know you are doing
+# this file is for local testing only and will not be uploaded within theme to pullentity.com
 #= require "underscore-min"
 #= require "mustache"
 
@@ -43,28 +44,65 @@ $(document).ready ->
   # layout initialization
   window.init_themes = ()->
 
+    window.theme = ""
+
+    window.data["project"] = {}
+
     template = $("#layout").html()
+
     window.mustache_themes = $(".pullentity-themes")
 
     window.list_theme =  $(".pullentity-themes#list")
-
-    window.data["project"] = window.data.projects[0]
-
-    fill_projects(window.data["project"].photos)
 
     layout = Mustache.to_html(template, data)
 
     $("body").html layout
 
+    if window.location.pathname == "/"
+      console.log("in /")
+      url = window.location.hash
+      m = switch
+        when "" then render_home_project()
+        when /(\w)\/\d/.test(url) then find_project_by_id()
+        when /(\w)/.test(url) then find_in_section()
+        else
+          console.warn("not matching url")
+
     $(window).on "hashchange", (e) ->
-      window.theme = ""
-      window.data["project"] = {}
+
       # find section by window.location, then find project and theme
-      find_in_section()
+      url = window.location.hash
+      console.log "changed to #{url}"
+      m = switch
+        when /(\w)\/\d/.test(url) then find_project_by_id()
+        when /(\w)/.test(url) then find_in_section()
+        else
+          console.warn("not matching url")
+
+
+  # get home project and render it
+  window.render_home_project = ()->
+
+    window.data["project"] = _.find(window.data.projects, (p) ->
+      p.home
+    )
+
+    console.log window.data["project"]
+
+    fill_projects(window.data["project"].photos)
+
+    find_theme_for_project()
+
+    console.log $(window.theme)
+
+    view = Mustache.to_html($(window.theme[0]).html(), window.data)
+    $("#content").html view
+
 
   # points path for remote image resources
   window.remote_path = (path)->
     "http://pullentity.com/#{path}"
+
 
   # builds the project photos hsh
   window.fill_projects = (collection)->
@@ -77,15 +115,15 @@ $(document).ready ->
        title: val.title
        caption: val.caption
 
+
   # display project or list
   window.display_project_or_list = (_tis)->
 
     if _tis.list_or_project == "project"
 
       console.log("trying theme #{window.data["project"].theme_template.name}")
-      window.theme = $($(_.find($(window.mustache_themes), (num) ->
-        $(num).attr("id") == window.data["project"].theme_template.name
-      )).html())
+
+      find_theme_for_project()
 
       fill_projects(window.data["project"].photos)
       view = Mustache.to_html($(window.theme[0]).html(), window.data)
@@ -99,36 +137,49 @@ $(document).ready ->
 
     false
 
-    #unless dummy?
-    #  console.warn("please create file in views/themes/#{window.data["project"].theme_template.name}.haml")
 
+  # finds the theme for project
+  window.find_theme_for_project = ()->
+    window.theme = $($(_.find($(window.mustache_themes), (num) ->
+        $(num).attr("id") == window.data["project"].theme_template.name
+      )).html())
 
-
+  # find data for project list
   window.data_projects_for_list = ()->
     section = _.find( window.data["sections"] , (num) ->
       num.public_url == window.location.hash
     )
 
     a = _.filter(window.data["projects"], (num) ->
-      true  if num.section.public_url is "#image"
+      true  if num.section.public_url is section.public_url
     )
     {section: section, projects: a}
 
   # maps project for section
   window.find_in_section = ()->
-
+    console.log "find in section?"
     $.each window.data.sections, ()->
 
       if this.public_url == window.location.hash
-        # find project
         _tis = this
         _tis.finds = false
 
-        $.each window.data.projects, ()->
-          if this.section.public_url == _tis.public_url
-            window.data["project"] = this
-            console.log window.data["project"]
-            display_project_or_list(_tis)
+        window.data["project"] = _.find( window.data.projects , (p)->
+          p.section.public_url == _tis.public_url
+        )
 
+        if window.data["project"]?
+          display_project_or_list(_tis)
+        else
+          $("#content").html("<pre>Couldn´t find projects in #{_tis.public_url} yet</pre>")
+          console.warn "Couldn´t find projects in #{_tis.public_url} yet"
 
+  # find by id
+  window.find_project_by_id = ()->
 
+    window.data["project"] = _.where(window.data.projects, { project_path: window.location.hash })[0]
+
+    find_theme_for_project()
+    fill_projects(window.data["project"].photos)
+    view = Mustache.to_html($(window.theme[0]).html(), window.data)
+    $("#content").html view

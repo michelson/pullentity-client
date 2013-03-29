@@ -72,6 +72,7 @@ module Pullentity
           end
 
           def site_api_call(path)
+            #puts "#{domain}#{path}?auth_token=#{@token}"
             uri = URI.parse("#{domain}#{path}?auth_token=#{@token}")
             http = Net::HTTP.new(uri.host, uri.port)
             request = Net::HTTP::Get.new(uri.request_uri)
@@ -118,9 +119,11 @@ module Pullentity
           end
 
           def prompt_for_site_select
+            check_for_yaml
             site_api_call("/api/v1/sites.json")
             count = 0
             arr = {}
+            puts @json_body
             @json_body.each do |site|
               count += 1
               arr[count] = site
