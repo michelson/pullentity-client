@@ -1,11 +1,13 @@
 # Don't edit this file unless you know you are doing
-
+#= require "underscore-min"
 #= require "mustache"
 
 $(document).ready ->
   template = undefined
   html = undefined
   window.base_image_path = "http://pullentity.com"
+  window.theme = ""
+  window.mustache_themes = ""
   window.data = {}
   window.data =
     site_link: "/"
@@ -41,13 +43,14 @@ $(document).ready ->
   window.init_themes = ()->
 
     template = $("#layout").html()
-
+    window.mustache_themes = $(".pullentity-themes")
+    #debugger
     window.data["project"] = window.data.projects[0]
 
     fill_projects(window.data["project"].photos)
     $.each window.data["project"].photos, (key, val) ->
       window.data["photos"].push
-         img_medium: remote_path( val.image.image.medium.url)
+         img_medium: remote_path(val.image.image.medium.url)
          img_large: remote_path(val.image.image.large.url)
          img_thumb: remote_path(val.image.image.thumb.url)
          title: val.title
@@ -58,22 +61,42 @@ $(document).ready ->
     $("body").html layout
 
     $(window).on "hashchange", (e) ->
+      window.theme = ""
+      window.data["project"] = {}
+      # find section by window.location, then find project and theme
+      $.each window.data.sections, ()->
+        if this.public_url == window.location.hash
+          # find project
+          _tis = this
+          _tis.finds = false
 
-      theme = $("#yield-scripts " + window.location.hash + " ").html()
+          $.each window.data.projects, ()->
 
-      console.warn("please create file in views/themes/#{window.location.hash}.haml") unless theme?
-      $.each window.data.projects, ()->
-        if this.section.public_url == window.location.hash
-          window.data["project"] = this
-          return
+            if this.section.public_url == _tis.public_url
+              _tis.finds = true
+              window.data["project"] = this
+              console.log window.data["project"]
+              if _tis.list_or_project == "project"
+
+                console.log("trying theme #{window.data["project"].theme_template.name}")
+                #debugger
+                window.theme = $($(_.find($(window.mustache_themes), (num) ->
+                  $(num).attr("id") == "home"
+                )).html())
+
+                console.warn("please create file in views/themes/#{this.theme_template.name}.haml")
+                view = Mustache.to_html($(window.theme[0]).html(), window.data)
+                console.log(view)
+                $("#content").html view
+
+              else
+                window.theme = $("#yield-scripts #list").html()
+              false
+
 
       console.warn "we couldn´t find project with section" unless window.data["project"]?
       fill_projects(window.data["project"].photos)
 
-      #console.log window.data.project
-      #debugger
-      view = Mustache.to_html(theme, window.data)
-      $("#loadScripts").html view
 
   window.remote_path = (path)->
     "http://pullentity.com/#{path}"
@@ -87,67 +110,4 @@ $(document).ready ->
        img_thumb: remote_path(val.image.image.thumb.url)
        title: val.title
        caption: val.caption
-  ###
-  window.data =
-    site_link: "/"
-    site:
-      name: "michelsongs"
-
-    sections: [
-      public_url: "#home"
-      title: "photos"
-      show_in_menu: true
-    ,
-      public_url: "#list"
-      title: "books"
-      show_in_menu: true
-    ,
-      public_url: "#theme1"
-      title: "theme1"
-      show_in_menu: true
-    ]
-    project:
-      title: "My Awesome Project"
-      body: "lorem bla bla"
-
-    photos: [
-      title: "my favorite things"
-      caption: "donuts, pizza, computers"
-      img_large: "http://farm7.staticflickr.com/6161/6187349656_4be054c2d8_z_d.jpg"
-    ,
-      title: "mexican"
-      caption: "Mexican letters"
-      img_large: "http://farm7.staticflickr.com/6155/6187348764_4565f30184_z_d.jpg"
-    ,
-      title: "Rome"
-      caption: "When in Rome"
-      img_large: "http://farm7.staticflickr.com/6158/6186830089_81d4fc3382_z_d.jpg"
-    ,
-      title: "Salvo"
-      caption: "Salvo"
-      img_large: "http://farm7.staticflickr.com/6065/6132525393_6a61e20cd9_z_d.jpg"
-    ]
-    section:
-      title: "some section here"
-
-    projects: [
-      project_photo: "http://farm7.staticflickr.com/6161/6187349656_4be054c2d8_z_d.jpg"
-      title: "project title"
-      project_path: "#home"
-    ,
-      project_photo: "http://farm7.staticflickr.com/6161/6187349656_4be054c2d8_z_d.jpg"
-      title: "project title 2"
-      project_path: "#home"
-    ,
-      project_photo: "http://farm7.staticflickr.com/6161/6187349656_4be054c2d8_z_d.jpg"
-      title: "project title 3"
-      project_path: "#home"
-    ]
-    public_url: "http://artenlinea.com"
-    url: ->
-      (text, render) ->
-        text = render(text)
-        url = text.trim().toLowerCase().split("tuts+")[0] + ".tutsplus.com"
-        "<a href=\"" + url + "\">" + text + "</a>"
-  ###
 

@@ -3,7 +3,7 @@
   .container-fluid
     .page-header
       %h1
-        %a.pjax{:href => "{{site_link}}"} Hello, welcom to {{site.name}}
+        %a.pjax{:href => "{{site_link}}"} Welcome to {{site.name}} site
     .row-fluid
       %ul#menu
         {{#sections}}
@@ -12,15 +12,9 @@
           %a.pjax{:href => "{{public_url}}"} {{title}}
         {{/show_in_menu}}
         {{/sections}}
-    .row-fluid{"data-pjax-container" => ""}
+    #content.row-fluid{"data-pjax-container" => ""}
       / Don't remove this line
-      #loadScripts
-        %pre Content should...
-      #yield-scripts
-        = yield_content(:principal)
-        {{{content}}}
-
-
+      {{{content}}}
 
     {{{loader}}}
 

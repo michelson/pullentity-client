@@ -5,11 +5,10 @@
   - theme_list = Dir.foreach(Dir.pwd + ("/source/views/themes") ).grep(/.haml/)
 
   - theme_list.each do |o|
-    - theme_name = o.gsub(".haml", "")
-    %div{ id: "#{theme_name}", style: "display:none"}
-      = partial "views/themes/#{theme_name}"
+    %script{ type: "template/text", id: "#{o.gsub(".haml", "")}", class: "pullentity-themes"}
+      %div{ id: "#{o.gsub(".haml", "")}", style: "display:none"}
+        = partial "views/themes/#{o.gsub(".haml", "")}"
 
   %div{ id: "list", style: "display:none"}
     = partial "views/list"
-
 
