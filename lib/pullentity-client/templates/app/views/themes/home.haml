@@ -2,7 +2,7 @@
   %h2 {{project.title}}
   {{{project.body}}}
 .span8
-  #myCarousel.carousel.slide{:style => "float:left"}
+  .myCarousel.carousel.slide{:style => "float:left"}
     .carousel-inner
       {{#photos}}
 
@@ -14,8 +14,8 @@
 
       {{/photos}}
 
-    %a.left.carousel-control{"data-slide" => "prev", :href => "#myCarousel"} ‹
+    %a.left.carousel-control{"data-slide" => "prev", :href => ".myCarousel"} ‹
 
-    %a.right.carousel-control{"data-slide" => "next", :href => "#myCarousel"} ›
+    %a.right.carousel-control{"data-slide" => "next", :href => ".myCarousel"} ›
 
   {{{fb_comments}}}

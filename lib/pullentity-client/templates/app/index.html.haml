@@ -1,5 +1,4 @@
 
-
 = content_for :principal do
 
   - theme_list = Dir.foreach(Dir.pwd + ("/source/views/themes") ).grep(/.haml/)
@@ -9,6 +8,5 @@
       %div{ id: "#{o.gsub(".haml", "")}", style: "display:none"}
         = partial "views/themes/#{o.gsub(".haml", "")}"
 
-  %div{ id: "list", style: "display:none"}
+  %script{ type: "template/text", id: "list", class: "pullentity-themes"}
     = partial "views/list"
-

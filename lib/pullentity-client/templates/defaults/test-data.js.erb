@@ -7,6 +7,7 @@ $(document).ready ->
   html = undefined
   window.base_image_path = "http://pullentity.com"
   window.theme = ""
+  window.list_theme = ""
   window.mustache_themes = ""
   window.data = {}
   window.data =
@@ -44,7 +45,9 @@ $(document).ready ->
 
     template = $("#layout").html()
     window.mustache_themes = $(".pullentity-themes")
-    #debugger
+
+    window.list_theme =  $(".pullentity-themes#list")
+
     window.data["project"] = window.data.projects[0]
 
     fill_projects(window.data["project"].photos)
@@ -58,7 +61,6 @@ $(document).ready ->
       window.data["project"] = {}
       # find section by window.location, then find project and theme
       find_in_section()
-      fill_projects(window.data["project"].photos)
 
   # points path for remote image resources
   window.remote_path = (path)->
@@ -82,18 +84,35 @@ $(document).ready ->
 
       console.log("trying theme #{window.data["project"].theme_template.name}")
       window.theme = $($(_.find($(window.mustache_themes), (num) ->
-        $(num).attr("id") == "home"
+        $(num).attr("id") == window.data["project"].theme_template.name
       )).html())
 
-      console.warn("please create file in views/themes/#{window.data["project"].theme_template.name}.haml")
+      fill_projects(window.data["project"].photos)
       view = Mustache.to_html($(window.theme[0]).html(), window.data)
-      #console.log(view)
       $("#content").html view
 
     else
-      window.theme = $("#yield-scripts #list").html()
+      console.log "should be list!!"
+      data_projects = data_projects_for_list()
+      view = Mustache.to_html($(window.list_theme).html(), data_projects)
+      $("#content").html view
 
     false
+
+    #unless dummy?
+    #  console.warn("please create file in views/themes/#{window.data["project"].theme_template.name}.haml")
+
+
+
+  window.data_projects_for_list = ()->
+    section = _.find( window.data["sections"] , (num) ->
+      num.public_url == window.location.hash
+    )
+
+    a = _.filter(window.data["projects"], (num) ->
+      true  if num.section.public_url is "#image"
+    )
+    {section: section, projects: a}
 
   # maps project for section
   window.find_in_section = ()->
