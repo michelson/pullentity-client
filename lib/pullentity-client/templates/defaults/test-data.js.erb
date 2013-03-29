@@ -13,7 +13,7 @@ $(document).ready ->
   window.data = {}
   window.data =
     site_link: "/"
-    public_url: "http://artenlinea.com"
+    public_url: "http://pullentity.com"
     project: {}
     photos: []
     url: ->
@@ -58,27 +58,20 @@ $(document).ready ->
 
     $("body").html layout
 
-    if window.location.pathname == "/"
-      console.log("in /")
-      url = window.location.hash
-      m = switch
-        when url == "" then render_home_project()
-        when /(\w)\/\d/.test(url) then find_project_by_id()
-        when /(\w)/.test(url) then find_in_section()
-        else
-          console.warn("not matching url")
+    simple_router(window.location.hash)
 
     $(window).on "hashchange", (e) ->
+      simple_router(window.location.hash)
 
-      # find section by window.location, then find project and theme
-      url = window.location.hash
-      console.log "changed to #{url}"
-      m = switch
-        when /(\w)\/\d/.test(url) then find_project_by_id()
-        when /(\w)/.test(url) then find_in_section()
-        else
-          console.warn("not matching url")
-
+  window.simple_router = (url)->
+    # find section by window.location, then find project and theme
+    url = window.location.hash
+    #console.log "changed to #{url}"
+    m = switch
+      when /(\w)\/\d/.test(url) then find_project_by_id()
+      when /(\w)/.test(url) then find_in_section()
+      else
+        console.warn("not matching url")
 
   # get home project and render it
   window.render_home_project = ()->
@@ -87,13 +80,13 @@ $(document).ready ->
       p.home
     )
 
-    console.log window.data["project"]
+    #console.log window.data["project"]
 
     fill_projects(window.data["project"].photos)
 
     find_theme_for_project()
 
-    console.log $(window.theme)
+    #console.log $(window.theme)
 
     view = Mustache.to_html($(window.theme[0]).html(), window.data)
     $("#content").html view
@@ -101,7 +94,7 @@ $(document).ready ->
 
   # points path for remote image resources
   window.remote_path = (path)->
-    "http://pullentity.com/#{path}"
+    "#{window.base_image_path}/#{path}"
 
 
   # builds the project photos hsh
@@ -121,7 +114,7 @@ $(document).ready ->
 
     if _tis.list_or_project == "project"
 
-      console.log("trying theme #{window.data["project"].theme_template.name}")
+      #console.log("trying theme #{window.data["project"].theme_template.name}")
 
       find_theme_for_project()
 
@@ -130,7 +123,7 @@ $(document).ready ->
       $("#content").html view
 
     else
-      console.log "should be list!!"
+      #console.log "should be list!!"
       data_projects = data_projects_for_list()
       view = Mustache.to_html($(window.list_theme).html(), data_projects)
       $("#content").html view
@@ -153,11 +146,15 @@ $(document).ready ->
     a = _.filter(window.data["projects"], (num) ->
       true  if num.section.public_url is section.public_url
     )
-    {section: section, projects: a}
+    project_collection = _.map a, (p)->
+      p["project_photo"] = remote_path(p.photos[0].image.image.medium.url) unless p.photos.length == 0
+      p
+
+    {section: section, projects: project_collection }
 
   # maps project for section
   window.find_in_section = ()->
-    console.log "find in section?"
+
     $.each window.data.sections, ()->
 
       if this.public_url == window.location.hash
