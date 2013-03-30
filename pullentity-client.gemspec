@@ -29,6 +29,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency(%q<compass>, ["~> 0.12.2"])
   gem.add_runtime_dependency(%q<session>, ["~> 3.1"])
   gem.add_runtime_dependency(%q<middleman>, ["3.0.12"])
+  gem.add_runtime_dependency("middleman-target")
   gem.add_runtime_dependency(%q<faraday>)
   gem.add_runtime_dependency("json")
 

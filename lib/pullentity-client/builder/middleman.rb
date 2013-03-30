@@ -5,7 +5,7 @@ module Pullentity::Client
         include ::Pullentity::Client::Utils
 
         def build
-          system "middleman build --verbose"
+          system "export MIDDLEMAN_BUILD_TARGET=remote_theme; middleman build --verbose"
         end
 
       end
