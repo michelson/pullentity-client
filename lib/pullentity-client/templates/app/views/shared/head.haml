@@ -12,8 +12,9 @@
 %script{:src => "https://raw.github.com/brandonaaron/livequery/master/jquery.livequery.js"}
 
 = javascript_include_tag "application"
+= stylesheet_link_tag "application"
 
-= javascript_include_tag "test-data"
+= test_data_include_tag
 
 = yield_content(:application_js)
 

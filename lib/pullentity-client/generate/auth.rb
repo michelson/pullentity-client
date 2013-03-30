@@ -94,7 +94,39 @@ module Pullentity
             response = conn.put("/api/v1/import_theme?auth_token=#{@token}&subdomain=#{@site}&theme_name=#{@theme_name}", payload )
             @json_body  = JSON.parse(response.body)
             say "#{@json_body[:status]} #{@json_body[:message]}", :green
+            asw = ask "upload assets too ?", :yellow
+            if asw == "yes"
+              upload_assets()
+            else
+              say "skipping assets upload", :green
+            end
           end
+
+          def upload_assets()
+            conn = Faraday.new(:url => domain) do |f|
+              f.request :multipart
+              f.request  :url_encoded             # form-encode POST params
+              #f.response :logger                  # log requests to STDOUT
+              f.adapter  Faraday.default_adapter  # make requests with Net::HTTP
+            end
+
+            say "upload application.js...", :green
+            payload = { :file => Faraday::UploadIO.new("#{location}/build/assets/javascripts/application.js", 'text/json') }
+            response = conn.put("/api/v1/upload_assets?auth_token=#{@token}&subdomain=#{@site}&theme_name=#{@theme_name}", payload )
+
+            say JSON.parse(response.body)
+
+            say "upload application.css...", :green
+            payload = { :file => Faraday::UploadIO.new("#{location}/build/assets/stylesheets/application.css", 'text/json') }
+            response = conn.put("/api/v1/upload_assets?auth_token=#{@token}&subdomain=#{@site}&theme_name=#{@theme_name}", payload )
+
+            say JSON.parse(response.body)
+          end
+
+          def images
+            Dir.glob("#{location}/build/assets/images/**/*")
+          end
+
 
           def get_site_activated_theme_data
             check_for_yaml

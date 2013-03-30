@@ -21,3 +21,12 @@ configure :build do
   activate :minify_javascript
   activate :relative_assets
 end
+
+activate :target do |target|
+
+  target.build_targets = {
+    "pullentity" => {
+      :includes => %w[remote_theme]
+    }
+  }
+end

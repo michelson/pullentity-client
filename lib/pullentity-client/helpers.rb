@@ -4,14 +4,21 @@ require 'middleman-target'
 module Pullentity::Client::Helpers
 
     def javascript_include_tag(file)
-
       if target?(:pullentity)
         path = "/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets/#{file}"
         "<script src='#{path}.js' type='text/javascript'></script>"
       else
         super
       end
+    end
 
+    def stylesheet_link_tag(file)
+      if target?(:pullentity)
+        path = "/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets/#{file}"
+        "<link href='#{path}.css' media='screen' rel='stylesheet' type='text/css' />"
+      else
+        super
+      end
     end
 
     def test_data_include_tag
