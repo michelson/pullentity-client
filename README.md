@@ -28,9 +28,13 @@ Run project
 
     pullentity s # or pullentity server
 
-  since its a middleman app you can
+  since it's a middleman app you can
 
     middleman s or middleman server
+
+Setup (login, site selection & import data)
+
+    pullentity setup
 
 Setup your credentials
 

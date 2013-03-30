@@ -81,9 +81,9 @@ $(document).ready ->
       else
         console.warn("not matching url")
 
-  window.render_theme = (theme_html)->
+  window.render_theme = (theme_html, data_hsh = window.data)->
     if theme_html?
-      view = Mustache.to_html(theme_html, window.data)
+      view = Mustache.to_html(theme_html, data_hsh)
       $("#content").html view
     else
       html = "<div style='margin:20px'><h1>Theme \"#{window.data.project.theme_template.name}\" not found!<h1>"
@@ -115,7 +115,7 @@ $(document).ready ->
     $.each collection, (key, val) ->
       window.data["photos"].push
        img_medium: remote_path( val.image.image.medium.url)
-       img_large: remote_path(val.image.image.large.url)
+       img_large: remote_path(val.image.image.xlarge.url)
        img_thumb: remote_path(val.image.image.thumb.url)
        title: val.title
        caption: val.caption
@@ -137,7 +137,7 @@ $(document).ready ->
     else
       #console.log "should be list!!"
       data_projects = data_projects_for_list()
-      render_theme($(window.list_theme).html())
+      render_theme($(window.list_theme).html(), data_projects)
 
     false
 
@@ -157,6 +157,7 @@ $(document).ready ->
     a = _.filter(window.data["projects"], (num) ->
       true  if num.section.public_url is section.public_url
     )
+
     project_collection = _.map a, (p)->
       p["project_photo"] = remote_path(p.photos[0].image.image.medium.url) unless p.photos.length == 0
       p
