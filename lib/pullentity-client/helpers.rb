@@ -58,10 +58,21 @@ module Pullentity::Client::MiddlemanConfig
       app.helpers Pullentity::Client::Helpers
       app.set :site_name, site_name
       app.set :theme_name, theme_name
+      app.set :sass_assets_paths, []
+      app.set :relative_links, false
+      app.set :images_dir,  "assets/images"
+      app.set :fonts_dir,  "assets/fonts"
+      app.set :css_dir,  "assets/stylesheets"
+      app.set :js_dir, "assets/javascripts"
+      app.set :markdown, :layout_engine => :haml
+      app.set :default_encoding, 'utf-8'
+
       app.compass_config do |config|
         # config is the Compass.configuration object
         config.output_style = :compact
-        config.http_images_path = "/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets"
+        if target?(:pullentity)
+          config.http_images_path = "/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets"
+        end
       end
     end
 

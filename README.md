@@ -60,7 +60,7 @@ Export and install the theme for your site.
 
 # TODO , path for 0.1.0
 
-1. upload assets.
+1. OK upload assets.
 2. import data
 3. OK setup task (login + select site)
 4. OK make default task

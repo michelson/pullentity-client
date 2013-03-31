@@ -1,20 +1,20 @@
 %script{ type: "template/text", id: "layout"}
 
-  .container-fluid
-    .page-header
-      %h1
-        %a.pjax{:href => "{{site_link}}"} Welcome to {{site.name}} site
-    .row-fluid
-      %ul#menu
-        {{#sections}}
-        {{#show_in_menu}}
-        %li
-          %a.pjax{:href => "{{public_url}}"} {{title}}
-        {{/show_in_menu}}
-        {{/sections}}
-    #content.row-fluid{"data-pjax-container" => ""}
-      / Don't remove this line
-      {{{content}}}
+  #sidebar
+    %h2
+      %a.pjax{:href => "{{site_link}}"}{{site.name}}
+
+    %ul#menu
+      {{#sections}}
+      {{#show_in_menu}}
+      %li
+        %a.pjax{:href => "{{public_url}}"} {{title}}
+      {{/show_in_menu}}
+      {{/sections}}
+
+  #content.row-fluid{"data-pjax-container" => ""}
+    / Don't remove this line
+    {{{content}}}
 
     {{{loader}}}
 

@@ -4,28 +4,20 @@
 
 require "pullentity-client/helpers"
 
-set :sass_assets_paths, []
-set :relative_links, false
-set :images_dir,  "assets/images"
-set :fonts_dir,  "assets/fonts"
-set :css_dir,  "assets/stylesheets"
-set :js_dir, "assets/javascripts"
-set :markdown, :layout_engine => :haml
-set :default_encoding, 'utf-8'
-
-page "views/*", :layout => false
-
-configure :build do
-  activate :minify_css
-  activate :minify_javascript
-  activate :relative_assets
-end
-
 activate :target do |target|
-
   target.build_targets = {
     "pullentity" => {
       :includes => %w[remote_theme]
     }
   }
 end
+
+activate :pullentity_config
+
+page "views/*", :layout => false
+
+configure :build do
+  activate :minify_css
+  activate :minify_javascript
+end
+
