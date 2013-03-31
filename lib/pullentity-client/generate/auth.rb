@@ -121,6 +121,14 @@ module Pullentity
             response = conn.put("/api/v1/upload_assets?auth_token=#{@token}&subdomain=#{@site}&theme_name=#{@theme_name}", payload )
 
             say JSON.parse(response.body)
+
+            say "upload images", :green
+            images.each do |image|
+              payload = { :file => Faraday::UploadIO.new("#{image}", 'text/json') }
+              response = conn.put("/api/v1/upload_assets?auth_token=#{@token}&subdomain=#{@site}&theme_name=#{@theme_name}", payload )
+              say JSON.parse(response.body)
+            end
+
           end
 
           def images
