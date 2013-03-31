@@ -1,12 +1,15 @@
-@import "compass";
 @import 'pullentity';
 @import "compass";
 
+// Responsive
+
+$break-small: 600px;
+$break-large: 1200px;
 
 body{
-
   background: image-url("ps_neutral.png") repeat scroll 0 0 #F4F4F4;
 }
+
 h2{
   /*font-family: "Oxygen", Helvetica, Arial;*/
   font-size: 22.5px;
@@ -69,12 +72,42 @@ h2{
   top: 0;
   width: 200px;
   z-index: 10;
+  @media screen and (max-width: $break-small) {
+    padding: 0 0 0 11px;
+    width: 100%;
+    float: none;
+    position: relative;
+    h2{
+      float:left;
+    }
+    li{
+      float:left;
+    }
+    #menu{
+      margin:15px 9px 11px;
+    }
+  }
+  @media screen and (min-width: $break-large) {
+    float: right;
+  }
 }
 
 #content {
   margin:16px 0 50px 260px;
   position: relative;
   width: 750px;
+  @media screen and (max-width: $break-small) {
+    float: none;
+    margin: 9px 0 41px 10px;
+    width: 95%;
+    h2{
+      font-size: 46px;
+    }
+  }
+  @media screen and (min-width: $break-large) {
+    //float: right;
+  }
+
   p{
     font-family: Georgia,Times,"Times New Roman",serif;
     font-size: 26px;
@@ -83,3 +116,5 @@ h2{
     margin-bottom: 40px;
   }
 }
+
+
