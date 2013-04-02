@@ -6,7 +6,7 @@
 $(document).ready ->
   template = undefined
   html = undefined
-  window.base_image_path = "http://pullentity.com"
+  window.base_image_path = "http://pullentity.s3.amazonaws.com"
   window.theme = ""
   window.list_theme = ""
   window.mustache_themes = ""
@@ -106,7 +106,7 @@ $(document).ready ->
 
   # points path for remote image resources
   window.remote_path = (path)->
-    "#{window.base_image_path}/#{path}"
+    "#{path}"
 
 
   # builds the project photos hsh

@@ -1,11 +1,13 @@
 require "middleman"
 require 'middleman-target'
+URL_REMOTE = "http://pullentity.s3.amazonaws.com"
 
 module Pullentity::Client::Helpers
 
+
   def javascript_include_tag(file)
     if target?(:pullentity)
-      path = "/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets/#{file}"
+      path = "#{URL_REMOTE}/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets/#{file}"
       "<script src='#{path}.js' type='text/javascript'></script>"
     else
       super
@@ -14,7 +16,7 @@ module Pullentity::Client::Helpers
 
   def stylesheet_link_tag(file)
     if target?(:pullentity)
-      path = "/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets/#{file}"
+      path = "#{URL_REMOTE}/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets/#{file}"
       "<link href='#{path}.css' media='screen' rel='stylesheet' type='text/css' />"
     else
       super
@@ -71,7 +73,7 @@ module Pullentity::Client::MiddlemanConfig
         # config is the Compass.configuration object
         config.output_style = :compact
         if target?(:pullentity)
-          config.http_images_path = "/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets"
+          config.http_images_path = "#{URL_REMOTE}/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets"
         end
       end
     end

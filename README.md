@@ -58,7 +58,7 @@ Export and install the theme for your site.
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-# TODO , path for 0.1.0
+# TODO , path for 1.0.0
 
 1. OK upload assets.
 2. import data
