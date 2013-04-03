@@ -25,7 +25,7 @@ module Pullentity::Client::Helpers
 
   def test_data_include_tag
     unless target?(:pullentity)
-      javascript_include_tag "test-data"
+      javascript_include_tag "pullentity/development"
     end
   end
 
