@@ -183,7 +183,12 @@ $(document).ready ->
     )
 
     project_collection = _.map a, (p)->
-      p["project_photo"] = remote_path(p.photos[0].image.image.medium.url) unless p.photos.length == 0
+      p["project_photo"]       = remote_path(p.photos[0].image.image.medium.url) unless p.photos.length == 0
+      p["project_photo_large"] = remote_path(p.photos[0].image.image.large.url) unless p.photos.length == 0
+      p["project_photo_xlarge"] = remote_path(p.photos[0].image.image.xlarge.url) unless p.photos.length == 0
+      p["project_photo_medium_thumb"] = remote_path(p.photos[0].image.image.medium_thumb.url) unless p.photos.length == 0
+      p["project_photo_medium_thumb_exact"] = remote_path(p.photos[0].image.image.medium_thumb_exact.url) unless p.photos.length == 0
+
       p
 
     {section: section, projects: project_collection }
