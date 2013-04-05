@@ -35,8 +35,8 @@ module Pullentity
   module Client
     ROOT_PATH = Pathname(__FILE__).dirname.expand_path
 
-    autoload  :VERSION,       'pullentity-client/version.rb'
-    autoload  :CLI,           'pullentity-client/cli.rb'
+    autoload  :VERSION,       "pullentity-client/version.rb"
+    autoload  :CLI,           "pullentity-client/cli.rb"
     autoload  :Logger,        "pullentity-client/logger.rb"
     autoload  :Utils,         "pullentity-client/utils.rb"
 
@@ -45,12 +45,11 @@ module Pullentity
       autoload  :Model,       "pullentity-client/generate/model.rb"
       autoload  :Exporter,    "pullentity-client/generate/exporter.rb"
       autoload  :Auth,        "pullentity-client/generate/auth.rb"
-      autoload  :Theme,        "pullentity-client/generate/theme.rb"
-
+      autoload  :Theme,       "pullentity-client/generate/theme.rb"
     end
 
     module Builder
-      autoload :Middleman,     'pullentity-client/builder/middleman.rb'
+      autoload :Middleman,     "pullentity-client/builder/middleman.rb"
     end
 
     def self.root

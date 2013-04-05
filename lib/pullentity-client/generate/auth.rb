@@ -10,7 +10,7 @@ module Pullentity
         no_tasks {
 
           def domain
-            "http://pullentity.com"
+            #"http://pullentity.com"
             #"http://pullentity.dev:3000"
           end
 
@@ -177,7 +177,11 @@ module Pullentity
             File.open("#{location}/source/assets/javascripts/pullentity_data.json","w") do |f|
               f.write(@json_body.to_json)
             end
-            say "data file imported at source/assets/javascripts/pullentity_data.json", :green if File.exists?("#{location}/data.json")
+            if @json_body["error"]
+              say @json_body, :red
+            else
+              say "data file imported at source/assets/javascripts/pullentity_data.json", :green if File.exists?("#{location}/source/assets/javascripts/pullentity_data.json")
+            end
           end
 
           def selector(arr)

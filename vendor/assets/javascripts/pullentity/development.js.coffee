@@ -16,6 +16,7 @@ $(document).ready ->
     public_url: "http://pullentity.com"
     project: {}
     photos: []
+    current_section: ""
     url: ->
       (text, render) ->
         text = render(text)
@@ -90,6 +91,15 @@ $(document).ready ->
       html += "<pre>Please create it in /source/views/themes/#{window.data.project.theme_template.name}.haml</pre></div>"
       $("body").html(html)
 
+  window.render_list_theme = (theme_html, data_hsh = window.data)->
+    if theme_html?
+      view = Mustache.to_html(theme_html, data_hsh)
+      $("#content").html view
+    else
+      html = "<div style='margin:20px'><h1>Theme \"#{window.data.current_section.theme_template.name}\" not found!<h1>"
+      html += "<pre>Please create it in /source/views/themes/#{window.data.current_section.theme_template.name}.haml</pre></div>"
+      $("body").html(html)
+
 
   # get home project and render it
   window.render_home_project = ()->
@@ -137,7 +147,14 @@ $(document).ready ->
     else
       #console.log "should be list!!"
       data_projects = data_projects_for_list()
-      render_theme($(window.list_theme).html(), data_projects)
+
+      if data_projects.section.theme_template?
+        #debugger
+        #theme = data_projects.section.theme_template.name
+        find_theme_for_list()
+        render_list_theme($(window.theme[0]).html(), data_projects)
+      else
+        render_theme($(window.list_theme).html(), data_projects)
 
     false
 
@@ -148,11 +165,18 @@ $(document).ready ->
         $(num).attr("id") == window.data["project"].theme_template.name
       )).html())
 
+  # finds the theme for list
+  window.find_theme_for_list = ()->
+    window.theme = $($(_.find($(window.mustache_themes), (num) ->
+        $(num).attr("id") == window.data["current_section"].theme_template.name
+      )).html())
+
   # find data for project list
   window.data_projects_for_list = ()->
     section = _.find( window.data["sections"] , (num) ->
       num.public_url == window.location.hash
     )
+    window.data.current_section = section
 
     a = _.filter(window.data["projects"], (num) ->
       true  if num.section.public_url is section.public_url
