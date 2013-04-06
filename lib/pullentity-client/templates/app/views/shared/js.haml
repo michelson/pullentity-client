@@ -4,7 +4,7 @@
   $(function() {
 
     $.pjax.defaults.timeout = 5000;
-    $('a.pjax').pjax('[data-pjax-container]');
+    $(document).pjax('a.pjax', '[data-pjax-container]')
 
     function onAfter(curr, next, opts) {
       var index = opts.currSlide;

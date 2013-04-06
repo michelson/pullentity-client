@@ -62,14 +62,26 @@ module Pullentity
             Dir.foreach(location.join("build/assets/images") ).grep(/.jpg|.jpeg|.png|.gif|.ico/).each do |image|
               images << image
             end
+
             fonts = []
             Dir.foreach(location.join("build/assets/fonts") ).grep(/.eot|.svg|.ttf|.woff/).each do |font|
               fonts << font
             end
+
+            jss = []
+            Dir.foreach(location.join("build/assets/javascripts") ).grep(/.js$/).each do |js|
+              jss << js
+            end
+
+            styles = []
+            Dir.foreach(location.join("build/assets/stylesheets") ).grep(/.css/).each do |css|
+              styles << css
+            end
+
             js      =  File.open(location.join("build/assets/javascripts/application.js")).readlines.join("")
             css = File.open(location.join("build/assets/stylesheets/application.css")).readlines.join("")
 
-            { :images => images , :js => js, :css => css , :fonts=> fonts }
+            { :images => images , :js => jss, :css => styles , :fonts=> fonts }
 
           end
 

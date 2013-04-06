@@ -45,6 +45,7 @@ module Pullentity
           def check_for_yaml
             begin
               hsh = YAML.load_file(location + "pullentity.yml")
+
               @token      = hsh["auth_token"]
               @site       = hsh["site"]
               @theme_name = hsh["theme_name"]
@@ -55,6 +56,15 @@ module Pullentity
             rescue => e
               say "Error, make sure you are inside a pullentity project", :red
               say "and pullentity.yml file is created" , :red
+              raise
+            end
+          end
+
+          def check_for_json_build
+            begin
+              @json_hsh = JSON.parse( IO.read("#{location}/pullentity_build.json") )
+            rescue => e
+              say "error #{e}", :red
               raise
             end
           end
@@ -82,6 +92,7 @@ module Pullentity
 
           def export_api_call()
             check_for_yaml
+            check_for_json_build
 
             conn = Faraday.new(:url => domain) do |f|
               f.request :multipart
@@ -103,32 +114,32 @@ module Pullentity
           end
 
           def upload_assets()
-            conn = Faraday.new(:url => domain) do |f|
+
+            @conn = Faraday.new(:url => domain) do |f|
               f.request :multipart
               f.request  :url_encoded             # form-encode POST params
               #f.response :logger                  # log requests to STDOUT
               f.adapter  Faraday.default_adapter  # make requests with Net::HTTP
             end
 
-            say "upload application.js...", :green
-            payload = { :file => Faraday::UploadIO.new("#{location}/build/assets/javascripts/application.js", 'text/json') }
-            response = conn.put("/api/v1/upload_assets?auth_token=#{@token}&subdomain=#{@site}&theme_name=#{@theme_name}", payload )
-
-            say JSON.parse(response.body)
-
-            say "upload application.css...", :green
-            payload = { :file => Faraday::UploadIO.new("#{location}/build/assets/stylesheets/application.css", 'text/json') }
-            response = conn.put("/api/v1/upload_assets?auth_token=#{@token}&subdomain=#{@site}&theme_name=#{@theme_name}", payload )
-
-            say JSON.parse(response.body)
-
-            say "upload images", :green
-            images.each do |image|
-              payload = { :file => Faraday::UploadIO.new("#{image}", 'text/json') }
-              response = conn.put("/api/v1/upload_assets?auth_token=#{@token}&subdomain=#{@site}&theme_name=#{@theme_name}", payload )
-              say JSON.parse(response.body)
+            {"js" => "javascripts", "css"=>"stylesheets", "images"=> "images", "fonts"=>"fonts"}.each do |k, v|
+              @json_hsh["assets"]["#{k}"].each do |file|
+                say "upload #{k}: #{file}", :magenta
+                upload_file("#{location}/build/assets/#{v}/#{file}", "text/json")
+              end
             end
 
+          end
+
+          def upload_file(file, mime_type="text/json")
+            payload = { :file => Faraday::UploadIO.new("#{file}", mime_type) }
+            response = @conn.put("/api/v1/upload_assets?auth_token=#{@token}&subdomain=#{@site}&theme_name=#{@theme_name}", payload )
+            status =  JSON.parse(response.body)
+            if status.keys.include?("error")
+              say status["message"], :red
+            else
+              say status["message"], :green
+            end
           end
 
           def images
