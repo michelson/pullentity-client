@@ -1,4 +1,6 @@
 0.0.1
+  2013/07/31
+    Add template layout for backbone client side app
   2013/03/23
     Add login interaction for api
     add select sites
