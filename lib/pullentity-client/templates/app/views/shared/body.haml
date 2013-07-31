@@ -1,16 +1,16 @@
-%script{ type: "template/text", id: "layout"}
+%script{ type: "text/x-handlebars-template", id: "layout"}
 
   #sidebar
     %h2
-      %a.pjax{:href => "{{site_link}}"}{{site.name}}
+      %a.pjax{:href => ""} {{name}}
 
     %ul#menu
-      {{#sections}}
+      {{#each sections}}
       {{#show_in_menu}}
       %li
-        %a.pjax{:href => "{{public_url}}"} {{title}}
+        %a{:href => "{{SectionUrl this}}"} {{title}}
       {{/show_in_menu}}
-      {{/sections}}
+      {{/each}}
 
   #content.row-fluid{"data-pjax-container" => ""}
     / Don't remove this line
