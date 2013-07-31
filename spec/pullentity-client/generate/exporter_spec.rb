@@ -8,7 +8,7 @@ describe "Creating of a new Pullentity Client Project" do
 
   context "Directories should be created" do
     before :all do
-      system("cd dailyfocus && bundle exec pullentity export new name")
+      system("cd dailyfocus && bundle exec pullentity theme export")
     end
 
     it "should generate the export build json" do
