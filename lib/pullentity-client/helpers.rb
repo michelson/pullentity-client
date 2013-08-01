@@ -51,8 +51,11 @@ module Pullentity::Client::Helpers
     end
   end
 
-
 end
+
+# config.rb
+require 'rack/rewrite'
+
 
 module Pullentity::Client::MiddlemanConfig
   class << self
@@ -76,6 +79,13 @@ module Pullentity::Client::MiddlemanConfig
           config.http_images_path = "#{URL_REMOTE}/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets"
         end
       end
+
+
+      app.use Rack::Rewrite do
+        r301 %r{/sections(.*)}, '/'
+        r301 %r{/projects(.*)}, '/'
+      end
+
     end
 
     def site_name
