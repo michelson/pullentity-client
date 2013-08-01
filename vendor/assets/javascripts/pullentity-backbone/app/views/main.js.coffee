@@ -6,7 +6,7 @@ class Pullentity.Views.Commons.Main extends Backbone.View
 
   initialize: ->
 
-    console.log "COMMONS DASHBOARD LOADED!!!"
+    console.info "pullentity LOADED!!!"
     @site = new Pullentity.Models.Site(id: "michelsongs")
     @site.on("change", @initModels )
     @site.fetch()
@@ -57,7 +57,7 @@ class Pullentity.Views.Commons.Main extends Backbone.View
     @initRouter()
 
   render_home_project: ()=>
-    @current_project = @projects.findWhere({home: true})
+    @current_project = @projects.findWhere({home: true })
     @find_theme_for_project()
     @render_project()
 
@@ -91,17 +91,18 @@ class Pullentity.Views.Commons.Main extends Backbone.View
           num
 
     @find_projects_for_list(@current_section)
-    @current_template = Handlebars.compile($(@current_theme_obj).html())
+    @render_handlebars()
     $("#content").html(@current_template({section: @current_section.attributes, projects: @list_projects }))
 
   render_project: ()=>
-    @current_template = Handlebars.compile($(@current_theme_obj).html())
+    @render_handlebars()
     $("#content").html(@current_template(@current_project.attributes))
 
   find_theme_for_project: ()=>
     @current_theme_obj = _.find @theme_templates, (num)=>
       if $(num).attr("id") == @current_project.get("theme_template").name
         num
+    console.error "theme \"#{@current_project.get("theme_template").name}\" does not exist" unless @current_theme_obj
 
   find_theme_for_list: ()=>
     #console.log("list with theme!")
@@ -119,5 +120,12 @@ class Pullentity.Views.Commons.Main extends Backbone.View
   render_with_error: (name)=>
     $("#content").html("<pre>Couldn´t find template #{name} in /source/views/themes</pre>")
     console.warn "Couldn´t find projects in #{name} yet"
+
+  render_handlebars: ()=>
+    try
+      @current_template = Handlebars.compile($(@current_theme_obj).html())
+    catch e
+      #console.error "error while creating Handlebars script out of template for [", $(@current_theme_obj), e
+      throw e
 
 layout = new Pullentity.Views.Commons.Main
