@@ -1,8 +1,8 @@
 Handlebars.registerHelper 'SectionUrl', (section)->
-  "#sections/#{section.id}"
+  "/#sections/#{section.id}"
 
 Handlebars.registerHelper 'ProjectUrl', (project)->
-  "#projects/#{project.id}"
+  "/#projects/#{project.id}"
 
 Handlebars.registerHelper 'ProjectImg', (version)->
   v = version ? version : "url"

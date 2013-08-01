@@ -1,7 +1,7 @@
 class Pullentity.Models.Site extends Backbone.Model
   url : ()->
     if @id
-      "#{Pullentity.Domain}.pullentity.com/api/v1/site"
+      "#{Pullentity.Domain}.#{Pullentity.host}/api/v1/site"
     else
-      "#{Pullentity.Domain}.pullentity.com/api/v1/sites"
+      "#{Pullentity.Domain}.#{Pullentity.host}/api/v1/sites"
 

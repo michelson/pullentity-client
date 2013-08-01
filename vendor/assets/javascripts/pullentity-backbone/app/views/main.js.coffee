@@ -23,6 +23,8 @@ class Pullentity.Views.Commons.Main extends Backbone.View
 
     @render()
 
+    @setupLinks()
+
     # quizas cargar router acá
 
   setTitle: ()=>
@@ -45,7 +47,7 @@ class Pullentity.Views.Commons.Main extends Backbone.View
       #console.log("get section #{id}")
       @find_in_section(id)
 
-    Backbone.history.start() #(pushState: true)
+    Backbone.history.start(pushState: true)
 
   render: ()=>
     #console.info("should render layout")
@@ -127,5 +129,27 @@ class Pullentity.Views.Commons.Main extends Backbone.View
     catch e
       #console.error "error while creating Handlebars script out of template for [", $(@current_theme_obj), e
       throw e
+
+  setupLinks: ()=>
+    # Globally capture clicks. If they are internal and not in the pass
+    # through list, route them through Backbone's navigate method.
+    $(document).on "click", "a[href^='/']", (event) =>
+
+      href = $(event.currentTarget).attr('href')
+
+      # chain 'or's for other black list routes
+      passThrough = href.indexOf('sign_out') >= 0
+
+      # Allow shift+click for new tabs, etc.
+      if !passThrough && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey
+        event.preventDefault()
+
+        # Remove leading slashes and hash bangs (backward compatablility)
+        url = href.replace(/^\//,'').replace('\#\/','')
+
+        # Instruct Backbone to trigger routing events
+        @app_router.navigate url, { trigger: true }
+
+        return false
 
 layout = new Pullentity.Views.Commons.Main

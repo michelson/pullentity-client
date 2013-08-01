@@ -6,6 +6,6 @@ class Pullentity.Collections.Projects extends Backbone.Collection
 
   url : ()->
     if @id
-      "#{Pullentity.Domain}.pullentity.com/api/v1/site/projects/#{@id}"
+      "#{Pullentity.Domain}.#{Pullentity.host}/api/v1/site/projects/#{@id}"
     else
-      "#{Pullentity.Domain}.pullentity.com/api/v1/site/projects"
+      "#{Pullentity.Domain}.#{Pullentity.host}/api/v1/site/projects"

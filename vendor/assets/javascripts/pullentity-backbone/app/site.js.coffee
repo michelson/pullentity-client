@@ -11,6 +11,7 @@ if _.isUndefined window.pullentity_domain
 
 window.Pullentity =
   Domain: window.pullentity_domain
+  host:  "pullentity.com" # "pullentity.dev:3000" #
   Models: {}
   Collections: {}
   Routers: {}
