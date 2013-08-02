@@ -1,13 +1,13 @@
 %h2 {{section.title}}´s projects
 
 %ul.thumbnails
-  {{#projects}}
+  {{#each projects}}
   %li.span3
     .thumbnail
-      %a{ :href=>"{{project_path}}" }
-        %img{:alt => "{{title}}", :src => "{{project_photo}}"}/
+      %a{ :href=> "{{ProjectUrl this}}" }
+        %img{ :alt => "{{title}}", :src => "{{ProjectImg 'url'}}" }
       .caption
         %h5
-          %a.pjax{:href => "{{project_path}}"} {{title}}
-        %p
-  {{/projects}}
+          %a.pjax{:href => "{{ProjectUrl this}}"} {{ title }}
+
+  {{/each}}

@@ -46,7 +46,7 @@ Choose the site you want to export theme.
 
 Export and install the theme for your site.
 
-    pullentity export
+    pullentity theme export
 
 
 

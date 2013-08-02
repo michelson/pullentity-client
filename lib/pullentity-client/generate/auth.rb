@@ -1,3 +1,5 @@
+
+# -*- encoding: utf-8 -*-
 require 'session'
 
 module Pullentity
@@ -51,7 +53,8 @@ module Pullentity
               @theme_name = hsh["theme_name"]
               if hsh["auth_token"].empty?
                 say "Error, the auth_token is empty", :red
-                say "run: pullentity login" , :yellow
+                say "run: $ pullentity login your@email" , :magenta
+                exit(1)
               end
             rescue => e
               say "Error, make sure you are inside a pullentity project", :red

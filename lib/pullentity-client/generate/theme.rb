@@ -29,7 +29,7 @@ module Pullentity
         end
 
         #map %(n) => 'select'
-        desc "make_defalt", "needs auth_token."
+        desc "make_default", "needs auth_token."
         long_desc "make default site"
         def make_default
           ::Pullentity::Client::Generate::Exporter.start(['export'])
@@ -37,9 +37,9 @@ module Pullentity
         end
 
         #map %(n) => 'select'
-        desc "make_defalt", "needs auth_token."
+        desc "show theme", "needs auth_token."
         long_desc "make default site"
-        def current
+        def show_theme
           ::Pullentity::Client::Generate::Auth.start(['show_theme'])
         end
 

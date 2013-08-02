@@ -96,7 +96,7 @@ module Pullentity
 
         end
 
-        map %(n) => 'export'
+        map %(ex) => 'export'
         desc "export", "exports a new Pullentity Client project."
         long_desc "Exports a new Pullentity project"
         def export

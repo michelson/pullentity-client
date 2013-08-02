@@ -28,7 +28,7 @@ module Pullentity
         say "Version #{::Pullentity::Client::VERSION}"
       end
 
-      map %w(r) => 'server'
+      map %w(s) => 'server'
       desc "server ", "run middleman app"
       def server
         system "echo == :::pullentity-client STARTING::: =="
