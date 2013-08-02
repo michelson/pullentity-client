@@ -1,5 +1,6 @@
 require "middleman"
 require 'middleman-target'
+
 URL_REMOTE = "http://pullentity.s3.amazonaws.com"
 
 module Pullentity::Client::Helpers
@@ -78,6 +79,7 @@ module Pullentity::Client::MiddlemanConfig
         if target?(:pullentity)
           config.http_images_path = "#{URL_REMOTE}/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets"
         end
+        #config.http_images_path = "#{URL_REMOTE}/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets"
       end
 
 

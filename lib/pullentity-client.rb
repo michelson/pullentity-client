@@ -10,6 +10,7 @@ require 'thor'
 require 'erubis'
 require 'nokogiri'
 require 'json'
+require 'debugger'
 
 require 'tempfile'
 require 'pullentity-client/thor/shell/password'
