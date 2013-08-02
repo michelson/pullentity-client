@@ -73,6 +73,14 @@ module Pullentity::Client::MiddlemanConfig
       app.set :markdown, :layout_engine => :haml
       app.set :default_encoding, 'utf-8'
 
+      activate :target do |target|
+        target.build_targets = {
+          "pullentity" => {
+            :includes => %w[remote_theme]
+          }
+        }
+      end
+
       app.configure :build do
         if target?(:pullentity)
           activate :minify_css
