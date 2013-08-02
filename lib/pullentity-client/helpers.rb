@@ -60,6 +60,7 @@ require 'rack/rewrite'
 
 module Pullentity::Client::MiddlemanConfig
   class << self
+
     def registered(app)
       app.helpers Pullentity::Client::Helpers
       app.set :site_name, site_name
@@ -72,14 +73,6 @@ module Pullentity::Client::MiddlemanConfig
       app.set :js_dir, "assets/javascripts"
       app.set :markdown, :layout_engine => :haml
       app.set :default_encoding, 'utf-8'
-
-      activate :target do |target|
-        target.build_targets = {
-          "pullentity" => {
-            :includes => %w[remote_theme]
-          }
-        }
-      end
 
       app.configure :build do
         if target?(:pullentity)
