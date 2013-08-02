@@ -73,17 +73,14 @@ module Pullentity::Client::MiddlemanConfig
       app.set :markdown, :layout_engine => :haml
       app.set :default_encoding, 'utf-8'
 
-      app.compass_config do |config|
-        # config is the Compass.configuration object
-        config.output_style = :expanded
+      app.configure :build do
         if target?(:pullentity)
-          config.http_images_path = "#{URL_REMOTE}/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets"
+          activate :minify_css
+          activate :minify_javascript
+          app.set :http_prefix, "#{URL_REMOTE}"
+          app.set :images_dir,  "/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets"
         end
-        #debugger
-        1 + 1
-        #config.http_images_path = "#{URL_REMOTE}/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets"
       end
-
 
       app.use Rack::Rewrite do
         r301 %r{/sections(.*)}, '/'
