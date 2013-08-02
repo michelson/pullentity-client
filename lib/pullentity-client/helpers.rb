@@ -75,10 +75,12 @@ module Pullentity::Client::MiddlemanConfig
 
       app.compass_config do |config|
         # config is the Compass.configuration object
-        config.output_style = :compact
+        config.output_style = :expanded
         if target?(:pullentity)
           config.http_images_path = "#{URL_REMOTE}/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets"
         end
+        #debugger
+        1 + 1
         #config.http_images_path = "#{URL_REMOTE}/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets"
       end
 
