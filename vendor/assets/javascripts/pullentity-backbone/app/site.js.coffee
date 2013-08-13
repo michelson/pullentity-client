@@ -5,6 +5,12 @@
 #= require_tree ./views
 #= require_tree ./routers
 
+unless window.console
+  console =
+    log: ->
+    alert: ->
+    info: ->
+
 if _.isUndefined window.pullentity_domain
   alert("Please configure the domain name in pullentity.yml file or run pullentity auth login")
   false
