@@ -1,13 +1,14 @@
-%h2 {{section.title}}
+.col-12
+  %h2 {{section.title}}
 
-{{#each projects}}
-.list-project
+  {{#each projects}}
+  .list-project
 
-  %h3
-    %a.pjax{:href => "{{project_path}}"} {{title}}
+    %h3
+      %a.pjax{:href => "{{ProjectUrl this}}"} {{title}}
 
-  %a.thumbnail{:href => "{{project_path}}"}
-    %img{:alt => "{{title}}", :src => "{{ProjectImg 'url'}}"}
+    %a.thumbnail{:href => "{{ProjectUrl this}}"}
+      %img{:alt => "{{title}}", :src => "{{ProjectImg 'xlarge'}}"}
 
-  %hr
-{{/each}}
+    %hr
+  {{/each}}

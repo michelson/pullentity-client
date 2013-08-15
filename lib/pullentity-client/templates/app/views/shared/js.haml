@@ -3,40 +3,6 @@
 
   $(function() {
 
-    function onAfter(curr, next, opts) {
-      var index = opts.currSlide;
-      //$('#prev')[index == 0 ? 'hide' : 'show']();
-      //$('#next')[index == opts.slideCount - 1 ? 'hide' : 'show']();
-    }
-    function onBefore(curr, next, opts) {
-      $("#num").html("("+ (opts.currSlide + 1) + " of " + opts.slideCount + ")");
-    }
-    $('#slideshow')
-      .livequery(function(){
-      $(this).cycle({
-      fx:     'fade',
-      prev:   '#prev',
-      next:   '#next',
-      after:   onAfter,
-      before:   onBefore,
-      timeout: 0
-      });
-    });
 
-    $('.myCarousel')
-      .livequery(function(){
-      $(this).find(".item").first().addClass('active');
-      $(this).carousel();
-    });
-
-    $.ajaxSetup({
-      dataType: "script",
-      beforeSend: function() {
-        return $("#loader").fadeIn();
-      },
-      complete: function() {
-        return $("#loader").fadeOut();
-      }
-    });
 
   });
