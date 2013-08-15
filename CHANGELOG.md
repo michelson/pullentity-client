@@ -1,3 +1,8 @@
+0.3.6
+  2013/08/15
+  Move pullentity js backbone to pullentity-backbone gem
+0.3.3 / 0.3.4 / 0.3.5
+  Bug fixes
 0.3.2
   2013/08/01
     fix build helper

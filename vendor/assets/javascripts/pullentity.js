@@ -1,3 +1,0 @@
-
-//= require "./pullentity-backbone/application"
-
