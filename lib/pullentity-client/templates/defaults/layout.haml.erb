@@ -1,6 +1,8 @@
 !!! Strict
 %html{:xmlns => 'http://www.w3.org/1999/xhtml', 'xml:lang' => 'en', :lang => 'en'}
   %head
+    :javascript
+      !window.pullentity_domain ? window.pullentity_domain = "http://#{site_name}" : null
     = partial("views/shared/head")
 
   = partial "views/shared/js"
@@ -11,5 +13,3 @@
     = partial("views/shared/body")
 
     = yield_content(:principal)
-
-
