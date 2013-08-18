@@ -1,6 +1,6 @@
 # Pullentity::Client
 
-This gem provides a simple builder workspace for make pullentity sites with haml and sass
+This gem provides a simple builder workspace for make [pullentity](http://pullentity.com/) sites with haml and sass
 
 ## Installation
 
@@ -34,7 +34,7 @@ Run project
 
 Setup (login, site selection & import data)
 
-    pullentity setup
+    pullentity setup your@email.com
 
 Setup your credentials
 
@@ -48,8 +48,6 @@ Export and install the theme for your site.
 
     pullentity theme export
 
-
-
 ## Contributing
 
 1. Fork it
@@ -57,12 +55,3 @@ Export and install the theme for your site.
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
-
-# TODO , path for 1.0.0
-
-1. OK upload assets.
-2. import data
-3. OK setup task (login + select site)
-4. OK make default task
-5. OK load remote data
-6. use mustache server side
