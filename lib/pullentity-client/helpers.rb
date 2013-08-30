@@ -9,7 +9,7 @@ module Pullentity::Client::Helpers
   def javascript_include_tag(file)
     if target?(:pullentity)
       path = "#{URL_REMOTE}/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets/#{file}"
-      "<script src='#{path}.js' type='text/javascript'></script>"
+      "<script src='#{path}.js?#{Time.now.to_i}' type='text/javascript'></script>"
     else
       super
     end
@@ -18,7 +18,7 @@ module Pullentity::Client::Helpers
   def stylesheet_link_tag(file)
     if target?(:pullentity)
       path = "#{URL_REMOTE}/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets/#{file}"
-      "<link href='#{path}.css' media='screen' rel='stylesheet' type='text/css' />"
+      "<link href='#{path}.css?#{Time.now.to_i}' media='screen' rel='stylesheet' type='text/css' />"
     else
       super
     end
@@ -42,14 +42,6 @@ module Pullentity::Client::Helpers
 
   def location
     @location ||= Pathname.new(Dir.pwd)
-  end
-
-  def asset_pathxxxx(file)
-    if target?(:pullentity)
-      'yea'
-    else
-      super
-    end
   end
 
 end
