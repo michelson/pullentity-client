@@ -23,7 +23,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency(%q<colored>, ["~> 1.2"])
   gem.add_runtime_dependency(%q<rake>, ["~> 0.9.2"])
   gem.add_runtime_dependency(%q<nokogiri>)
-  #gem.add_runtime_dependency(%q<erubis>, ["~> 2.7.0"])
+  gem.add_runtime_dependency(%q<erubis>, ["~> 2.7.0"])
   #gem.add_runtime_dependency(%q<rocco>, ["~> 0.7"])
   gem.add_runtime_dependency(%q<thor>, ["~> 0.15.4"])
   #gem.add_runtime_dependency(%q<compass>, ["~> 0.12.2"])

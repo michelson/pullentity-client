@@ -15,7 +15,7 @@ require 'json'
 require 'tempfile'
 require 'pullentity-client/thor/shell/password'
 
-require 'http/net'
+require 'net/http'
 
 Thor::Shell::Basic.class_eval do
   include Thor::Shell::Password

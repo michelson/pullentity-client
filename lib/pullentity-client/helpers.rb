@@ -30,14 +30,21 @@ module Pullentity::Client::Helpers
     end
   end
 
+  def yaml_config
+    @yaml_config ||= YAML.load_file(location + "pullentity.yml")
+  end
+
+
   def site_name
-    hsh = YAML.load_file(location + "pullentity.yml")
-    hsh["site"]
+    yaml_config["site"]
   end
 
   def theme_name
-    hsh = YAML.load_file(location + "pullentity.yml")
-    hsh["theme_name"]
+    yaml_config["theme_name"]
+  end
+
+  def theme_host
+    yaml_config["theme_host"] || "pullentity.com"
   end
 
   def location
