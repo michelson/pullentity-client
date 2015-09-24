@@ -12,7 +12,7 @@ module Pullentity
         no_tasks {
 
           def domain
-            "http://pullentity.com"
+            ENV['PULLENTITY_ENV'] || "http://pullentity.com"
             #"http://pullentity.dev:3000"
           end
 

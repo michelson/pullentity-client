@@ -50,7 +50,7 @@ module Pullentity
       end
 
       map %(n) => 'login'
-      desc "auth login <email> ", "login and configures auth_token."
+      desc "login <email> ", "login and configures auth_token."
       long_desc "login and configures auth_token"
       def login(email)
         ::Pullentity::Client::Generate::Auth.start(['set_login', email])
