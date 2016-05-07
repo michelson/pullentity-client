@@ -33,6 +33,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency(%q<faraday>)
   gem.add_runtime_dependency("json")
   gem.add_runtime_dependency("rack-rewrite")
+  gem.add_runtime_dependency("bootstrap-sass")
 
 
   # gem.add_development_dependency(%q<bundler>, ["~> 1.0.14"])
