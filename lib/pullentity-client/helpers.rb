@@ -79,6 +79,7 @@ module Pullentity::Client::MiddlemanConfig
           activate :minify_javascript
           app.set :http_prefix, "#{URL_REMOTE}"
           app.set :images_dir,  "/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets"
+          app.set :fonts_dir,  "/uploads/theme_asset/#{site_name}/theme/#{theme_name}/assets"
         end
       end
 
